@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "smartphone")
-public class SmartPhone {
+@Table(name = "turno")
+public class Turno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_smartphone")
-    private Long idSmartPhone;
-    private String marca;
-    private Long precio;
+    @Column(name = "id_turno")
+    private Long id_turno;
+    private String fecha;
 }
