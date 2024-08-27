@@ -60,10 +60,13 @@ public class SecurityConfig {
 
                 // *** DATOS DE PRUEBA ** //
 
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "USER")
-                .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "USER")
+                .requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
+                .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.DELETE,"/api/turno/eliminar/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/turno/actualizar").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
