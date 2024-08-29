@@ -1,5 +1,8 @@
 package com.adri.api_spa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,10 +26,11 @@ public class Cliente {
     private String domicilio;
 
 
-
-    @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id" , referencedColumnName = "id_usuario")
+    @JsonBackReference
     private Usuarios usuario;
+
 
 
 }

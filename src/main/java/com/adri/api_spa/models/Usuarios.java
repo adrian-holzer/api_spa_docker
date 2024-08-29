@@ -1,5 +1,8 @@
 package com.adri.api_spa.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +26,9 @@ public class Usuarios {
     @Column(name = "id_usuario")
     private Long idUsuario;
     private String username;
+
+
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "El nombre no puede estar vacío")
@@ -42,6 +48,15 @@ public class Usuarios {
     @Email(message = "El email debe tener un formato válido")
     @Column(unique = true) // Define email as unique in the database
     private String email;
+
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Cliente cliente;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Profesional profesional;
 
 
 

@@ -27,4 +27,10 @@ public class DtoRegistro {
     @Email(message = "El email debe tener un formato válido")
     private String email;
 
+
+
+    private String telefono;
+
+    private String domicilio;
+
 }

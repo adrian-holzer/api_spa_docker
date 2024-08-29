@@ -1,6 +1,7 @@
 package com.adri.api_spa.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,9 +22,12 @@ public class Profesional {
 
 
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id" , referencedColumnName = "id_usuario")
+    @JsonBackReference
     private Usuarios usuario;
+
+
 
 
 

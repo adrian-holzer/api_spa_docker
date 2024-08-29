@@ -5,8 +5,11 @@ import com.adri.api_spa.Utils.ResponseHandler;
 import com.adri.api_spa.dtos.DtoAuthRespuesta;
 import com.adri.api_spa.dtos.DtoLogin;
 import com.adri.api_spa.dtos.DtoRegistro;
+import com.adri.api_spa.models.Cliente;
+import com.adri.api_spa.models.Profesional;
 import com.adri.api_spa.models.Roles;
 import com.adri.api_spa.models.Usuarios;
+import com.adri.api_spa.repositories.IClienteRepository;
 import com.adri.api_spa.repositories.IRolesRepository;
 import com.adri.api_spa.repositories.IUsuariosRepository;
 import com.adri.api_spa.security.JwtGenerador;
@@ -33,16 +36,18 @@ public class RestControllerAuth {
     private AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
     private IRolesRepository rolesRepository;
+    private IClienteRepository clienteRepository;
     private IUsuariosRepository usuariosRepository;
     private JwtGenerador jwtGenerador;
 
     @Autowired
-
-    public RestControllerAuth(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, IRolesRepository rolesRepository, IUsuariosRepository usuariosRepository, JwtGenerador jwtGenerador) {
+    public RestControllerAuth(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, IRolesRepository rolesRepository, IUsuariosRepository usuariosRepository,
+                              IClienteRepository clienteRepository,JwtGenerador jwtGenerador) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.rolesRepository = rolesRepository;
         this.usuariosRepository = usuariosRepository;
+        this.clienteRepository= clienteRepository;
         this.jwtGenerador = jwtGenerador;
     }
     //Método para poder registrar usuarios con role "user"
@@ -66,12 +71,18 @@ public class RestControllerAuth {
 
         }
         Usuarios usuarios = new Usuarios();
+        Cliente cliente =  new Cliente();
+        cliente.setDomicilio(dtoRegistro.getDomicilio());
+        cliente.setTelefono(dtoRegistro.getTelefono());
         usuarios.setUsername(dtoRegistro.getUsername());
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
         usuarios.setNombre(dtoRegistro.getNombre());
         usuarios.setApellido(dtoRegistro.getApellido());
         usuarios.setEmail(dtoRegistro.getEmail());
         usuarios.setDni(dtoRegistro.getDni());
+
+        usuarios.setCliente(cliente);
+        cliente.setUsuario(usuarios);
 
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
 
@@ -80,10 +91,13 @@ public class RestControllerAuth {
 
         usuariosRepository.save(usuarios);
 
-        return new ResponseEntity<>("el dni ya existe, intenta con otro", HttpStatus.OK);
+        Usuarios u = usuariosRepository.findFirstByOrderByIdUsuarioDesc();
 
+        return ResponseHandler.generateResponse("Usuario Cliente creado correctamente",HttpStatus.OK,u);
 
     }
+
+
 
 
     //Método para poder guardar usuarios de tipo ADMIN
@@ -102,20 +116,52 @@ public class RestControllerAuth {
     }
 
 
-    //Método para poder guardar usuarios de tipo ADMIN
+    //Método para poder guardar usuarios de tipo Profesionales
+
     @PostMapping("registerProf")
-    public ResponseEntity<String> registrarProfesional(@RequestBody DtoRegistro dtoRegistro) {
+    public ResponseEntity<?> registrarProfesional(@Valid @RequestBody DtoRegistro dtoRegistro, Errors errors) {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
         }
+        if (usuariosRepository.existsByEmail(dtoRegistro.getEmail())) {
+            return new ResponseEntity<>("el email ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
+        }
+
+        if (usuariosRepository.existsByDni(dtoRegistro.getDni())) {
+            return new ResponseEntity<>("el dni ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
+        }
+
+        if (errors.hasErrors()){
+
+            return ResponseHandler.generateResponse("Complete los datos correctamente",HttpStatus.BAD_REQUEST,new ApiError(errors).getErrores());
+
+        }
         Usuarios usuarios = new Usuarios();
+        Profesional profesional =  new Profesional();
         usuarios.setUsername(dtoRegistro.getUsername());
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
-        Roles roles = rolesRepository.findByName("ADMIN").get();
+        usuarios.setNombre(dtoRegistro.getNombre());
+        usuarios.setApellido(dtoRegistro.getApellido());
+        usuarios.setEmail(dtoRegistro.getEmail());
+        usuarios.setDni(dtoRegistro.getDni());
+
+        usuarios.setProfesional(profesional);
+        profesional.setUsuario(usuarios);
+
+        usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+
+        Roles roles = rolesRepository.findByName("PROFESIONAL").get();
         usuarios.setRoles(Collections.singletonList(roles));
+
         usuariosRepository.save(usuarios);
-        return new ResponseEntity<>("Registro de admin exitoso", HttpStatus.OK);
+
+        Usuarios u = usuariosRepository.findFirstByOrderByIdUsuarioDesc();
+
+        return ResponseHandler.generateResponse("Usuario Profesional creado correctamente",HttpStatus.OK,u);
     }
+
+
+
 
     //Método para poder logear un usuario y obtener un token
     @PostMapping("login")
