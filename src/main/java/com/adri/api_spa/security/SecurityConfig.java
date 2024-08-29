@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
-                .requestMatchers("/api/auth/registerProf").permitAll()
+                .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/consulta/crear").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/consulta/{idConsulta}/respuestas/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")

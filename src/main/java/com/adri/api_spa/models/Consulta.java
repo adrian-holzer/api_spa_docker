@@ -29,7 +29,7 @@ public class Consulta {
         private String nombrePersona;
         private String temaConsulta;
         private String textoConsulta;
-        private boolean estadoConsulta;
+        private boolean contestado=false;
 
         @Email(message = "El email debe tener un formato válido")
         @NotBlank(message = "El email es obligatorio")

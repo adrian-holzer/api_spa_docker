@@ -7,9 +7,12 @@ import com.adri.api_spa.models.Consulta;
 import com.adri.api_spa.models.Respuesta;
 import com.adri.api_spa.services.ConsultaService;
 import com.adri.api_spa.services.RespuestaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,24 +29,15 @@ public class RestControllerConsulta {
 
 
     @PostMapping(value = "crear")
-    public void crearConsulta(@RequestBody DtoConsulta dtoConsulta) {
+    public ResponseEntity<?> crearConsulta(@Valid @RequestBody DtoConsulta dtoConsulta, Errors errors) {
 
-//        if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
-//            return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
-//        }
-//        if (usuariosRepository.existsByEmail(dtoRegistro.getEmail())) {
-//            return new ResponseEntity<>("el email ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        if (usuariosRepository.existsByDni(dtoRegistro.getDni())) {
-//            return new ResponseEntity<>("el dni ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        if (errors.hasErrors()){
-//
-//            return ResponseHandler.generateResponse("Complete los datos correctamente",HttpStatus.BAD_REQUEST,new ApiError(errors).getErrores());
-//
-//        }
+
+        if (errors.hasErrors()){
+
+            return ResponseHandler.generateResponse("Complete los datos correctamente",HttpStatus.BAD_REQUEST,new ApiError(errors).getErrores());
+
+        }
+
 
 
 
@@ -52,9 +46,14 @@ public class RestControllerConsulta {
         c.setEmail(dtoConsulta.getEmail());
         c.setTextoConsulta(dtoConsulta.getTextoConsulta());
         c.setTemaConsulta(dtoConsulta.getTemaConsulta());
-        c.setEstadoConsulta(false);
+
+
 
         consultaService.crear(c);
+
+        return ResponseHandler.generateResponse("Consulta Enviada",HttpStatus.CREATED,c);
+
+
 
 
     }
@@ -77,6 +76,7 @@ public class RestControllerConsulta {
         Respuesta nuevaRespuesta = respuestaService.crearYEnviarRespuesta(
                 respuesta, respuesta.getConsulta().getEmail()
         );
+
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaRespuesta);
     }
 

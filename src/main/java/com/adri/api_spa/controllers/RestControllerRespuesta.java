@@ -21,18 +21,4 @@ public class RestControllerRespuesta {
 
 
 
-    @PostMapping(value = "crear")
-    public ResponseEntity<Respuesta> crearRespuesta(@RequestBody Respuesta respuesta) {
-
-
-
-
-
-
-
-        Respuesta nuevaRespuesta = respuestaService.crearYEnviarRespuesta(
-                respuesta, respuesta.getConsulta().getEmail()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaRespuesta);
-    }
 }
