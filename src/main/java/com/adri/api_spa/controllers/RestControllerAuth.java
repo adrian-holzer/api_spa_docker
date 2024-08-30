@@ -23,10 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -170,7 +167,28 @@ public class RestControllerAuth {
                 dtoLogin.getUsername(), dtoLogin.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerador.generarToken(authentication);
-        return new ResponseEntity<>(new DtoAuthRespuesta(token), HttpStatus.OK);
+       String username = jwtGenerador.obtenerUsernameDeJwt(token);
+
+        Usuarios usuarioLogueado= usuariosRepository.findByUsername(username).get();
+
+
+        return new ResponseEntity<>(new DtoAuthRespuesta(token,usuarioLogueado), HttpStatus.OK);
+    }
+
+
+    // Obtener usuario logueado
+
+    @GetMapping("/userLogueado")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+
+
+            Usuarios usuarioLogueado= usuariosRepository.findByUsername(authentication.getName()).get();
+
+             return ResponseHandler.generateResponse("Usuario Logueado",HttpStatus.OK,usuarioLogueado);
+        }
+         return ResponseHandler.generateResponse("No existe usuario logueado",HttpStatus.BAD_REQUEST,null);
     }
 
 

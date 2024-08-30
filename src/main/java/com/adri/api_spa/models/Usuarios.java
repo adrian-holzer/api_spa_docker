@@ -51,11 +51,9 @@ public class Usuarios {
 
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private Cliente cliente;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private Profesional profesional;
 
 

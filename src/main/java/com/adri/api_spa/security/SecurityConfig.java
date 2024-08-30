@@ -62,6 +62,7 @@ public class SecurityConfig {
 
                 .requestMatchers("/api/auth/register").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/userLogueado").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
                 .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/consulta/crear").permitAll()
