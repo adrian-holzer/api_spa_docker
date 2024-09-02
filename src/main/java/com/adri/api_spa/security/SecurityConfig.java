@@ -67,6 +67,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/consulta/crear").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/consulta/{idConsulta}/respuestas/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST,"/api/comentario/crear").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/comentario/listar").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "PROFESIONAL")
