@@ -28,8 +28,8 @@ services:
     ports:
       - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: adming26
-      MYSQL_PASSWORD: adming26
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: api_spa_sentirse_bien
     restart: always
     healthcheck:
