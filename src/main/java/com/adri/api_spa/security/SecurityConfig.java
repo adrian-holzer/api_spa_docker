@@ -60,13 +60,16 @@ public class SecurityConfig {
 
                 // *** DATOS DE PRUEBA ** //
 
-                .requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/registerCliente").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/userLogueado").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
                 .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/consulta/crear").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/consulta/{idConsulta}/respuestas/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET, "/api/consulta/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET, "/api/consulta/").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET, "/api/consulta/{idConsulta}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.POST,"/api/comentario/crear").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/comentario/listar").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")

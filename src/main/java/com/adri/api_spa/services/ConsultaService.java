@@ -6,6 +6,8 @@ import com.adri.api_spa.repositories.IConsultaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConsultaService {
 
@@ -23,6 +25,21 @@ public class ConsultaService {
     public Consulta findById(Long id) {
 
         return this.consultaRepository.findById(id).isPresent() ? this.consultaRepository.findById(id).get() : null;
+
+    }
+
+
+    public List<Consulta> findAll() {
+
+        return this.consultaRepository.findAll();
+
+    }
+
+
+
+    public List<Consulta> findByContestado(boolean contestado) {
+
+        return this.consultaRepository.findByContestado(contestado);
 
     }
 

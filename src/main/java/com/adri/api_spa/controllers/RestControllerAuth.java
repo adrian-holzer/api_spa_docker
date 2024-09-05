@@ -47,8 +47,8 @@ public class RestControllerAuth {
         this.clienteRepository= clienteRepository;
         this.jwtGenerador = jwtGenerador;
     }
-    //Método para poder registrar usuarios con role "user"
-    @PostMapping("register")
+    //Método para poder registrar usuarios con role "cliente"
+    @PostMapping("registerCliente")
     public ResponseEntity<?>  registrar(@Valid @RequestBody DtoRegistro dtoRegistro, Errors errors) {
 
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {

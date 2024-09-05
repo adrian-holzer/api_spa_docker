@@ -10,9 +10,9 @@
 - Al iniciar la app se crean los roles ADMIN, PROFESIONAL, CLIENTE y un usuario con rol ADMIN Y PROFESIONAL para probar
 la respuesta de consultas y el registro de nuevos profesionales.
 
-Datos del usuario que se crea para hacer el login :
+Datos del usuario que se crea para hacer el login (ADMIN) :
 
-POST- http://localhost:8080/api/auth/login
+POST- {{host}}/api/auth/login
 
 {
 "username" : "user_admin",
@@ -29,19 +29,21 @@ rutas que lo requieran por ejemplo crear un nuevo profesional o responder a cons
 
 - Registro de Cliente
 
-POST http://localhost:8080/api/auth/register
+POST {{host}}/api/auth/register
 
 Datos de prueba Ejemplo
 
 En Body -> Raw :
 
 {
+
 "username" : "user1",
 "password" : "pass" ,
 "dni" : "40150100",
 "email": "prueba@email.com",
 "nombre" :  "juan",
 "apellido": "perez"
+
 }
 
 ///////////////////////////////////////////////////////////
@@ -49,7 +51,7 @@ En Body -> Raw :
 
 - Login de Cliente 
 
-POST- http://localhost:8080/api/auth/login
+POST- {{host}}/api/auth/login
 
 
 Datos de prueba Ejemplo
@@ -57,6 +59,7 @@ Datos de prueba Ejemplo
 En Body -> Raw -> JSON :
 
 {
+
 "username" : "user1",
 "password" : "pass" ,
 
@@ -67,7 +70,7 @@ resultado -> { token , Baerer } -> con estos datos se prueba la autorizacion en 
 
 
 ///////////////////////////////////////////////////////////
-Registro de profesional (TIENE QUE ESTAR AUTENTICADO ALGUN USUARIO PROFESIONAL)
+Registro de profesional (TIENE QUE ESTAR AUTENTICADO ALGUN USUARIO ADMIN )
 
 
 {
@@ -77,12 +80,11 @@ Registro de profesional (TIENE QUE ESTAR AUTENTICADO ALGUN USUARIO PROFESIONAL)
 "email": "prof1@email.com",
 "nombre" :  "juan",
 "apellido": "perez"
-}
+
+   }
 
 
-
-
-POST - http://localhost:8080/api/auth/registerProf
+POST - {{host}}/api/auth/registerProf
 
 
 
@@ -94,7 +96,7 @@ Login de Profesional(IGUAL QUE CON CLIENTE)
 
 - Enviar una consulta -> puede realizarla cualquiera (todos pueden acceder a esa url)
 
-POST - http://localhost:8080/api/consulta/crear
+POST - {{host}}/api/consulta/crear
 
 Datos de prueba 
 
@@ -109,13 +111,55 @@ Datos de prueba
 
 - Responder una Consulta -> solo la puede responder un profesional (tiene que estar autenticado)
 
--POST http://localhost:8080/api/consulta/1/respuestas/crear (el numero es la consulta que estas respondiendo, verificar que este creada en la bd)
+-POST {{host}}/api/consulta/1/respuestas/crear (el numero es la consulta que estas respondiendo, verificar que este creada en la bd)
 
 
 {
 
     "textoRespuesta" : "estoy respondiendo a la consulta"
 }
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+
+Operaciones con Consultas > (solo lo puede hacer un admin o un profesional)
+
+-- Listar Todas las consultas 
+
+GET / {{host}}/api/consulta/listar
+
+
+-- Listar consulta por ID 
+
+
+GET / {{host}}/api/consulta/1
+
+-- Listar consultas contestadas
+
+GET / {{host}}/api/consulta/listar?contestado=true
+
+
+
+-- Listar consultas no contestadas
+
+GET / {{host}}/api/consulta/listar?contestado=false
+
+
+/////////////////////////////////////////////
+
+Operaciones con Comentarios > (Lo puede hacer cualquiera)
+
+-- Listado de comentarios
+
+GET / {{host}}/api/comentario/listar
+
+-- Crear un comentario 
+
+
+POST / {{host}}/api/comentario/crear
+
 
 
  **** Completar los datos de application.properties ***** 

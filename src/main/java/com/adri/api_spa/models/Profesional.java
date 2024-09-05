@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,6 +29,9 @@ public class Profesional {
     @JsonBackReference
     private Usuarios usuario;
 
+
+    @OneToMany(mappedBy = "profesional", cascade = CascadeType.ALL)
+    private List<HorarioLaboral> horariosLaborales;
 
 
 
