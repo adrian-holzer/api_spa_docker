@@ -13,6 +13,7 @@ import com.adri.api_spa.repositories.IClienteRepository;
 import com.adri.api_spa.repositories.IRolesRepository;
 import com.adri.api_spa.repositories.IUsuariosRepository;
 import com.adri.api_spa.security.JwtGenerador;
+import com.adri.api_spa.services.ProfesionalService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -36,6 +38,9 @@ public class RestControllerAuth {
     private IClienteRepository clienteRepository;
     private IUsuariosRepository usuariosRepository;
     private JwtGenerador jwtGenerador;
+
+    @Autowired
+    ProfesionalService profesionalService;
 
     @Autowired
     public RestControllerAuth(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, IRolesRepository rolesRepository, IUsuariosRepository usuariosRepository,
@@ -135,6 +140,12 @@ public class RestControllerAuth {
         }
         Usuarios usuarios = new Usuarios();
         Profesional profesional =  new Profesional();
+
+
+
+
+
+
         usuarios.setUsername(dtoRegistro.getUsername());
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
         usuarios.setNombre(dtoRegistro.getNombre());
@@ -150,9 +161,20 @@ public class RestControllerAuth {
         Roles roles = rolesRepository.findByName("PROFESIONAL").get();
         usuarios.setRoles(Collections.singletonList(roles));
 
+        profesionalService.asignarHorarios(profesional);
+
         usuariosRepository.save(usuarios);
 
+        // Busco el ultimo usuario creado para mandarlo en la confirmacion
+
         Usuarios u = usuariosRepository.findFirstByOrderByIdUsuarioDesc();
+
+
+
+
+
+
+
 
         return ResponseHandler.generateResponse("Usuario Profesional creado correctamente",HttpStatus.OK,u);
     }

@@ -16,4 +16,6 @@ public class Turno {
     @Column(name = "id_turno")
     private Long id_turno;
     private String fecha;
+
+
 }

@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,19 +22,16 @@ public class HorarioLaboral {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_profesional", nullable = false)
-    private Profesional profesional;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DiaSemana diaSemana;
 
-    @Column(nullable = false)
-    private LocalTime horaInicio;
+    @Enumerated(EnumType.STRING)
+    private TurnoLaboral turnoLaboral;
 
-    @Column(nullable = false)
+    private LocalTime horaInicio;
     private LocalTime horaFin;
+
+    
 
 
 

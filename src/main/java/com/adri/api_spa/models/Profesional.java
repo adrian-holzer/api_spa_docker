@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -30,10 +33,13 @@ public class Profesional {
     private Usuarios usuario;
 
 
-    @OneToMany(mappedBy = "profesional", cascade = CascadeType.ALL)
-    private List<HorarioLaboral> horariosLaborales;
-
-
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Profesional_HorarioLaboral",
+            joinColumns = @JoinColumn(name = "id_profesional"),
+            inverseJoinColumns = @JoinColumn(name = "id_horario_laboral")
+    )
+    private List<HorarioLaboral> horariosLaborales = new ArrayList<>();
 
 
 
