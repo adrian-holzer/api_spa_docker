@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,9 +18,33 @@ import lombok.NoArgsConstructor;
 public class Turno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_turno")
-    private Long id_turno;
-    private String fecha;
+    private Long idTurno;
 
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_servicio")
+    private Servicio servicio;
+
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "turno_profesional",
+//            joinColumns = @JoinColumn(name = "id_turno"),
+//            inverseJoinColumns = @JoinColumn(name = "id_profesional"))
+//    private Set<Profesional> profesionales = new HashSet<>();
+
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_profesional")
+    private Profesional profesional;
+
+    private LocalDate fecha;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoTurno estado;
 
 }
