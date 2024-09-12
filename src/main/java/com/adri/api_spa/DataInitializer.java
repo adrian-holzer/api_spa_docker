@@ -81,10 +81,10 @@ public class DataInitializer implements CommandLineRunner {
 
         // Obtener los roles del repositorio
         Roles adminRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
-        Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+       // Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
 
         // Asignar ambos roles al usuario
-        usuarios.setRoles(Arrays.asList(adminRole, profesionalRole));
+        usuarios.setRoles(Arrays.asList(adminRole));
 
 
         usuariosRepository.save(usuarios);

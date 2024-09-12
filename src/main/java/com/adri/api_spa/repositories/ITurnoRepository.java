@@ -1,8 +1,6 @@
 package com.adri.api_spa.repositories;
 
-import com.adri.api_spa.models.HorarioLaboral;
-import com.adri.api_spa.models.Profesional;
-import com.adri.api_spa.models.Turno;
+import com.adri.api_spa.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,11 +13,14 @@ import java.util.List;
 @Repository
 public interface ITurnoRepository extends JpaRepository<Turno, Long> {
 
+    List<Turno> findByFecha(LocalDate fecha);
 
-//
-//    @Query("SELECT * FROM Turno t where t.fecha=fecha and estado='EN PROCESO'")
-//    List<Turno> findTurnosByFechaAndEstadoEnProceso(@Param("fecha") LocalDate fecha);
-//
-
+    // Método para buscar turnos por fecha, cliente, horaInicio y estado
+    List<Turno> findByFechaAndClienteAndHoraInicioAndEstado(
+            LocalDate fecha,
+            Cliente cliente,
+            LocalTime horaInicio,
+            EstadoTurno estado
+    );
 
 }

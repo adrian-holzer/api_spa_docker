@@ -21,8 +21,9 @@ public class UsuarioService {
     public Usuarios usuarioLogueado() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
 
+
+        if (authentication != null) {
 
             Usuarios usuarioLogueado= usuariosRepository.findByUsername(authentication.getName()).get();
 

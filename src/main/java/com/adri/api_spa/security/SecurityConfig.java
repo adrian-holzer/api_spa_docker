@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 //Le indica al contenedor de spring que esta es una clase de seguridad al momento de arrancar la aplicación
@@ -20,6 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //Indicamos que se activa la seguridad web en nuestra aplicación y además esta será una clase la cual contendrá toda la configuración referente a la seguridad
 public class SecurityConfig {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+
+
+
+
 
     @Autowired
     public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
@@ -75,6 +83,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/{idServicio}").permitAll()
                 .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").permitAll() // hasAuthority("CLIENTE")
+
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "PROFESIONAL")
