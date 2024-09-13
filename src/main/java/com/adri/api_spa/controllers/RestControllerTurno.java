@@ -1,15 +1,20 @@
 package com.adri.api_spa.controllers;
 
 
-import com.adri.api_spa.models.EstadoTurno;
-import com.adri.api_spa.models.Turno;
+import com.adri.api_spa.Utils.ApiError;
+import com.adri.api_spa.Utils.ResponseHandler;
+import com.adri.api_spa.dtos.DtoTurno;
+import com.adri.api_spa.models.*;
 import com.adri.api_spa.repositories.IClienteRepository;
 import com.adri.api_spa.repositories.IProfesionalRepository;
 import com.adri.api_spa.repositories.IServicioRepository;
 import com.adri.api_spa.repositories.ITurnoRepository;
 import com.adri.api_spa.services.TurnoService;
+import com.adri.api_spa.services.UsuarioService;
+import com.mysql.cj.xdevapi.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +30,9 @@ public class RestControllerTurno {
 
     @Autowired
     TurnoService turnoService;
+
+    @Autowired
+    UsuarioService usuarioService;
 
     @Autowired
     IClienteRepository clienteRepository;
@@ -50,33 +58,45 @@ public class RestControllerTurno {
 
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearTurno(@RequestParam("clienteId") Long clienteId,
-                                            @RequestParam("servicioId") Long servicioId,
-                                            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-                                            @RequestParam("horaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
-                                        @RequestParam("horaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFin) {
+    public ResponseEntity<?> crearTurno(@RequestBody DtoTurno turnoDto) {
+
 
         Turno nuevoTurno =  new Turno();
 
-//        nuevoTurno.setServicio();
-//
-//        nuevoTurno.setEstado(EstadoTurno.ASIGNADO);
-//
-//        nuevoTurno.setCliente();
-//
-//        nuevoTurno.setHoraInicio(horaInicio);
-//        nuevoTurno.setHoraFin(horaFin);
-//        nuevoTurno.setFecha(fecha);
-//
-//        // Busco profesional disponible, los pongo en una lista y asigno random
-//
-//        nuevoTurno.setProfesional();
+
+        nuevoTurno.setServicio(servicioRepository.findById(Long.parseLong(turnoDto.getId_servicio())).get());
+
+        nuevoTurno.setEstado(EstadoTurno.ASIGNADO);
+
+        nuevoTurno.setCliente(usuarioService.usuarioLogueado().getCliente());
+
+        nuevoTurno.setHoraInicio(turnoDto.getHoraInicio());
+        nuevoTurno.setHoraFin(turnoDto.getHoraFin());
+        nuevoTurno.setFecha(turnoDto.getFecha());
 
 
 
 
-        return ResponseEntity.ok("");
+
+
+        // Busco profesional disponible, los pongo en una lista y asigno random
+
+       Profesional profesional =  turnoService.obtenerProfesionalDisponible(turnoDto.getFecha(),turnoDto.getHoraInicio(),turnoDto.getHoraFin());
+
+       if (profesional== null){
+           return ResponseHandler.generateResponse("No hay personal disponible en este momento", HttpStatus.BAD_REQUEST,null);
+
+       }
+
+
+        nuevoTurno.setProfesional(profesional);
+
+       turnoRepository.save(nuevoTurno);
+
+        return  ResponseEntity.ok(nuevoTurno);
 
     }
+
+
 
 }

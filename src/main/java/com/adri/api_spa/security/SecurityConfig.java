@@ -91,6 +91,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.DELETE,"/api/turno/eliminar/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/turno/actualizar").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/turno/pruebaturnos").permitAll()
+
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

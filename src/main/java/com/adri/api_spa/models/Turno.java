@@ -1,5 +1,6 @@
 package com.adri.api_spa.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class Turno {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_profesional")
+    @JsonManagedReference
     private Profesional profesional;
 
     private LocalDate fecha;

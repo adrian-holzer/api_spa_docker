@@ -186,12 +186,21 @@ public class TurnoService {
                         }
                     }
 
+
+                    // Comprobar que el cliente no tenga un turno en esa fecha en ese horario
+
+                    List<Turno> t = turnoRepository.findByFechaAndClienteAndHoraInicioAndEstado(fecha,usuarioLoggeado.getCliente(),horaInicio,EstadoTurno.ASIGNADO);
+
+
+
+                        if (!t.isEmpty()){
+                            solapado = true;
+
+                        }
+
                     if (!solapado) {
 
 
-                        // Comprobar que el cliente no tenga un turno en esa fecha en ese horario
-
-                        List<Turno> t = turnoRepository.findByFechaAndClienteAndHoraInicioAndEstado(fecha,usuarioLoggeado.getCliente(),horaInicio,EstadoTurno.ASIGNADO);
 
                         intervalosDisponibles.add(Map.of(
 
@@ -241,6 +250,46 @@ public class TurnoService {
                 throw new IllegalArgumentException("Día de la semana no soportado: " + dayOfWeek);
         }
     }
+
+
+
+    public Profesional obtenerProfesionalDisponible(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+        // Obtener todos los profesionales
+        List<Profesional> todosLosProfesionales = profesionalRepository.findAll();
+
+        // Filtrar los profesionales que NO tengan un turno asignado en la fecha y hora especificada
+        List<Profesional> profesionalesDisponibles = todosLosProfesionales.stream()
+                .filter(profesional -> profesional.getTurnos().stream()
+                        .noneMatch(turno ->
+                                turno.getFecha().equals(fecha) &&
+                                        turno.getHoraInicio().equals(horaInicio) &&
+                                        turno.getHoraFin().equals(horaFin)
+                        )
+                )
+                .collect(Collectors.toList());
+
+
+        // Imprimir la lista de profesionales disponibles
+        System.out.println("Profesionales disponibles en la fecha " + fecha + " y horario " + horaInicio + " a " + horaFin + ":");
+        profesionalesDisponibles.forEach(profesional ->
+                System.out.println("ID: " + profesional.getIdProfesional() + ", Nombre: " + profesional.getUsuario().getUsername())
+        );
+
+        // Si la lista no está vacía, seleccionar un profesional aleatorio
+        if (!profesionalesDisponibles.isEmpty()) {
+            Random random = new Random();
+            int randomIndex = random.nextInt(profesionalesDisponibles.size());
+            Profesional profesionalAleatorio = profesionalesDisponibles.get(randomIndex);
+
+            System.out.println("Profesional seleccionado aleatoriamente: ID: " + profesionalAleatorio.getIdProfesional() + ", Nombre: " + profesionalAleatorio.getUsuario().getNombre());
+            return profesionalAleatorio;
+        } else {
+            System.out.println("No hay profesionales disponibles.");
+            return null; // O lanzar una excepción si prefieres manejar el caso de otra forma
+        }
+
+    }
+
 
 
 

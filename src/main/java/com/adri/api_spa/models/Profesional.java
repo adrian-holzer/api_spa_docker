@@ -41,7 +41,9 @@ public class Profesional {
     )
     private List<HorarioLaboral> horariosLaborales = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "profesional",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Turno> turnos;
 
 
 

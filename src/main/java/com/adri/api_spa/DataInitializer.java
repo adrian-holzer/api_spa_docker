@@ -69,15 +69,14 @@ public class DataInitializer implements CommandLineRunner {
 // Crear usuario admin
 
         Usuarios usuarios = new Usuarios();
-        Profesional profesional = new Profesional();
+       ;
         usuarios.setUsername("user_admin");
         usuarios.setPassword(passwordEncoder.encode("adminpass"));
         usuarios.setNombre("jorge");
         usuarios.setApellido("perez");
         usuarios.setDni("15555555");
         usuarios.setEmail("admin@email.com");
-        usuarios.setProfesional(profesional);
-        profesional.setUsuario(usuarios);
+
 
         // Obtener los roles del repositorio
         Roles adminRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
