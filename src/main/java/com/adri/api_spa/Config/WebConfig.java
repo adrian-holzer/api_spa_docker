@@ -13,29 +13,28 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 
 
-@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors()  // Habilita CORS
-                .and()
-                .csrf().disable();  // Deshabilita CSRF si no es necesario
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.cors()  // Habilita CORS
+//                .and()
+//                .csrf().disable();  // Deshabilita CSRF si no es necesario
+//
+//        return http.build();
+//    }
 
-        return http.build();
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");  // Permitir origen específico
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");  // Permitir todos los métodos
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost:5173");  // Permitir origen específico
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");  // Permitir todos los métodos
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
 
 
 }

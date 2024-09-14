@@ -3,6 +3,7 @@ package com.adri.api_spa.controllers;
 import com.adri.api_spa.Utils.ApiError;
 import com.adri.api_spa.Utils.ResponseHandler;
 import com.adri.api_spa.dtos.DtoConsulta;
+import com.adri.api_spa.dtos.DtoRespuesta;
 import com.adri.api_spa.models.Consulta;
 import com.adri.api_spa.models.Respuesta;
 import com.adri.api_spa.models.Usuarios;
@@ -72,7 +73,7 @@ public class RestControllerConsulta {
 
 
     @PostMapping(value = "{idConsulta}/respuestas/crear")
-    public ResponseEntity<?> crearRespuesta(@RequestBody Respuesta respuesta,@PathVariable Long idConsulta) {
+    public ResponseEntity<?> crearRespuesta(@RequestBody DtoRespuesta dtoRespuesta, @PathVariable Long idConsulta) {
 
         Consulta consulta = this.consultaService.findById(idConsulta);
 
@@ -80,13 +81,18 @@ public class RestControllerConsulta {
             return ResponseHandler.generateResponse("No se encontró la consulta con id "+ idConsulta ,HttpStatus.BAD_REQUEST,null);
         }
 
+        Respuesta respuesta = new Respuesta();
+
+        respuesta.setTextoRespuesta(dtoRespuesta.getTextoRespuesta());
         respuesta.setConsulta(consulta);
 
+        System.out.println(idConsulta);
         Respuesta nuevaRespuesta = respuestaService.crearYEnviarRespuesta(
                 respuesta, respuesta.getConsulta().getEmail()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaRespuesta);
+
     }
 
 

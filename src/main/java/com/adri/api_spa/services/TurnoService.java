@@ -263,7 +263,7 @@ public class TurnoService {
                         .noneMatch(turno ->
                                 turno.getFecha().equals(fecha) &&
                                         turno.getHoraInicio().equals(horaInicio) &&
-                                        turno.getHoraFin().equals(horaFin)
+                                        turno.getHoraFin().equals(horaFin) && !turno.getEstado().equals(EstadoTurno.CANCELADO)
                         )
                 )
                 .collect(Collectors.toList());

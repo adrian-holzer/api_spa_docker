@@ -4,6 +4,7 @@ package com.adri.api_spa.controllers;
 import com.adri.api_spa.Utils.ApiError;
 import com.adri.api_spa.Utils.ResponseHandler;
 import com.adri.api_spa.models.*;
+import com.adri.api_spa.repositories.ICategoriaServicioRepository;
 import com.adri.api_spa.services.ComentarioService;
 import com.adri.api_spa.services.ServicioService;
 import jakarta.validation.Valid;
@@ -25,6 +26,8 @@ public class RestControllerServicio {
     ServicioService ss ;
 
 
+    @Autowired
+    ICategoriaServicioRepository categoriaServicioRepository ;
 
 
     @GetMapping("listar")
@@ -64,7 +67,15 @@ public class RestControllerServicio {
     }
 
 
+    @GetMapping(value = "categorias")
+    public ResponseEntity<?> listarCategoriasDeServicios() {
 
+
+        List<CategoriaServicio> categoriaServicios = categoriaServicioRepository.findAll();
+
+        return ResponseHandler.generateResponse("Categorias de Servicios" ,HttpStatus.OK,categoriaServicios);
+
+    }
 
 
     @PostMapping(value = "crear")

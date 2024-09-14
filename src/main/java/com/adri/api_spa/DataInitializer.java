@@ -2,6 +2,7 @@ package com.adri.api_spa;
 
 import com.adri.api_spa.models.*;
 import com.adri.api_spa.repositories.*;
+import com.adri.api_spa.services.ProfesionalService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,6 +32,8 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     IServicioRepository servicioRepository;
 
+    @Autowired
+    ProfesionalService profesionalService;
 
 
     public DataInitializer(IRolesRepository roleRepository,IUsuariosRepository usuariosRepository,PasswordEncoder passwordEncoder) {
@@ -91,6 +94,9 @@ public class DataInitializer implements CommandLineRunner {
 
 
 
+
+
+
 // Crear horarios Laborales
 
         // Insertar horarios de lunes a sábado (mañana y tarde)
@@ -112,6 +118,43 @@ public class DataInitializer implements CommandLineRunner {
 
 
         // Crear categorias de Servicios y sus servicios asociados
+
+
+
+
+
+
+// Crear profesional
+
+
+        Usuarios usuariosProf = new Usuarios();
+        Profesional nuevoProf = new Profesional();
+        usuariosProf.setUsername("prof1");
+        usuariosProf.setPassword(passwordEncoder.encode("pass"));
+        usuariosProf.setNombre("carla");
+        usuariosProf.setApellido("gomez");
+        usuariosProf.setDni("30000111");
+        usuariosProf.setEmail("prof1@email.com");
+
+        usuariosProf.setProfesional(nuevoProf);
+        nuevoProf.setUsuario(usuariosProf);
+
+
+        // Obtener los roles del repositorio
+        Roles profRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+        // Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+
+        // Asignar ambos roles al usuario
+        usuariosProf.setRoles(Arrays.asList(profRole));
+
+
+        profesionalService.asignarHorarios(nuevoProf);
+
+        usuariosRepository.save(usuariosProf);
+
+
+
+
 
 // Crear categorías
 

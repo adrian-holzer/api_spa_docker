@@ -23,4 +23,12 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
             EstadoTurno estado
     );
 
+
+    List<Turno> findByCliente(Cliente cliente);
+
+    List<Turno> findByEstado(EstadoTurno estado);
+
+
+
+
 }

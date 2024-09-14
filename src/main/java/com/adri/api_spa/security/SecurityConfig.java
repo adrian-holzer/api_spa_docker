@@ -14,8 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 //Le indica al contenedor de spring que esta es una clase de seguridad al momento de arrancar la aplicación
@@ -52,11 +55,16 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
+
+
+
     //Vamos a crear un bean el cual va a establecer una cadena de filtros de seguridad en nuestra aplicación.
     // Y es aquí donde determinaremos los permisos segun los roles de usuarios para acceder a nuestra aplicación
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .exceptionHandling() //Permitimos el manejo de excepciones
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) //Nos establece un punto de entrada personalizado de autenticación para el manejo de autenticaciones no autorizadas
@@ -82,21 +90,36 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/comentario/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/{idServicio}").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/servicio/categorias").permitAll()
                 .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-
-                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").permitAll() // hasAuthority("CLIENTE")
-
-                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-                .requestMatchers(HttpMethod.GET,"/api/turno/listarId/**").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-                .requestMatchers(HttpMethod.DELETE,"/api/turno/eliminar/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/turno/actualizar").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/turno/pruebaturnos").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/turno/misTurnos").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
 
+                .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // Origen permitido
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        config.addExposedHeader("Authorization"); // Permite exponer el header Authorization
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
 }
