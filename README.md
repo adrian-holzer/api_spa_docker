@@ -245,3 +245,45 @@ GET - {{host}}/api/turno/listar?estado=finalizado
 
 
  **** Completar los datos de application.properties ***** 
+ 
+
+## Empleo y Postulaciones
+
+Crear un EMPLEO
+
+POST - {{host}}/api/empleo/crear (solo puede el PROFESIONAL)
+
+{
+
+    "titulo" : "Masajista",
+    "descripcion": "Lorem ipsum dolor sit amet consectetur, adipiscing elit praesent fringilla. Vestibulum ante non per hac metus consequat justo conubia nisl id phasellus gravida, vel nec bibendum natoque integer sollicitudin dui erat nostra primis nam. Per nulla ve"
+
+}
+
+
+Postularse a un empleo (lo puede hacer cualquiera)
+
+POST- {{host}}/api/postulacion/upload
+
+Los datos se mandan en > body > seleccionar form-data > agregar un atributo cv que es de tipo archivo (cambiar de text a file)
+Otro atributo id_empleo = 1 (el primer empleo creado)
+
+
+Listado de empleos (puede acceder cualquiera es lo que se ve en la pagina)
+
+GET - {{host}}/api/empleo/listar
+
+
+Listado de empleos activos
+
+GET- {{host}}/api/empleo/listar?estado=activo
+
+Listar Postulaciones (solo PROFESIONALES)
+
+GET - {{host}}/api/empleo/1/postulaciones >El 1 es el id del empleo
+
+
+
+Descargar el cv de la postulacion  (solo PROFESIONALES)
+
+GET - {{host}}/api/postulacion/download/1  > el 1 es de la postulacion

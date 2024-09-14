@@ -98,8 +98,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/turno/misTurnos").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
-
                 .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST,"/api/empleo/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/empleo/listar").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/empleo/{id}/postulaciones").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+                .requestMatchers(HttpMethod.POST,"/api/postulacion/upload").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/postulacion/download/{id}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -111,7 +118,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Origen permitido
+        config.setAllowedOrigins(List.of("http://localhost:5173","https://frontspa.netlify.app/")); // Origen permitido List.of("http://localhost:5173","https://frontspa.netlify.app/")
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

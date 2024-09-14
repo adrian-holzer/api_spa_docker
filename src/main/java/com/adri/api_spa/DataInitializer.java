@@ -33,6 +33,9 @@ public class DataInitializer implements CommandLineRunner {
     IServicioRepository servicioRepository;
 
     @Autowired
+    IEmpleoRepository empleoRepository;
+
+    @Autowired
     ProfesionalService profesionalService;
 
 
@@ -309,6 +312,33 @@ public class DataInitializer implements CommandLineRunner {
 
 
 
+
+
+
+        // CREAR EMPLEOS PREDEFINIDOS
+
+        Empleo e1 = new Empleo();
+        e1.setTitulo("Masajista de Bienestar");
+        e1.setDescripcion("Buscamos un masajista certificado con experiencia en técnicas de masaje relajante y terapéutico. El candidato ideal debe tener habilidades para ofrecer un servicio personalizado y adaptado a las necesidades del cliente. Se requiere flexibilidad de horarios y capacidad para trabajar en equipo.");
+        e1.setEstado(EstadoEmpleo.ACTIVO);
+
+        Empleo e2 = new Empleo();
+        e2.setTitulo("Esteticista Facial");
+        e2.setDescripcion("Se busca esteticista facial con experiencia en tratamientos de belleza y cuidado de la piel. El candidato debe tener conocimientos en técnicas de limpieza facial, exfoliación y tratamientos anti-edad. Se valorará la capacidad de asesorar a los clientes sobre el cuidado de la piel y ofrecer recomendaciones personalizadas.");
+        e2.setEstado(EstadoEmpleo.ACTIVO);
+
+        Empleo e3 = new Empleo();
+        e3.setTitulo("Terapeuta de Aromaterapia");
+        e3.setDescripcion("Estamos en busca de un terapeuta de aromaterapia con experiencia en la aplicación de aceites esenciales y técnicas de relajación. El candidato debe tener habilidades en la creación de mezclas personalizadas y ofrecer tratamientos que ayuden a reducir el estrés y mejorar el bienestar general. Se requiere una actitud profesional y habilidades interpersonales excepcionales.");
+        e3.setEstado(EstadoEmpleo.ACTIVO);
+
+
+
+        // Crear una lista de empleos
+        List<Empleo> empleos = Arrays.asList(e1, e2, e3);
+
+        // Guardar los empleos en la base de datos
+        empleoRepository.saveAll(empleos);
 
 
 

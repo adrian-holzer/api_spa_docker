@@ -1,7 +1,5 @@
 package com.adri.api_spa.models;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -11,39 +9,31 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "empleo")
-public class Empleo {
-
+@Table(name = "postulacion")
+public class Postulacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empleo")
-    private Long idEmpleo;
+    @Column(name = "id_postulacion")
+    private Long idPostulacion;
 
-    @NotBlank(message = "El titulo es obligatorio")
-    private String titulo;
+    @ManyToOne
+    @JoinColumn(name = "id_empleo", nullable = false)
+    private Empleo empleo;
+    @Column(name = "cv_filename")
+    private String cvFileName; // Aquí se almacena el nombre del archivo
 
     @Lob
-    @NotBlank(message = "La descripcion es obligatoria")
-    @Column(name = "descripcion",length = 30000)
-    private String descripcion;
+    @Column(name = "cv", nullable = false,length = 100000)
+    private byte[] cv; // Aquí se almacena el archivo PDF como un array de bytes
 
-
-
-    @Enumerated(EnumType.STRING)
-    private EstadoEmpleo estado=EstadoEmpleo.ACTIVO;
-
-
-
-    @OneToMany(mappedBy = "empleo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
-    private List<Postulacion> postulaciones; // Relación con Postulacion
+//    @Column(name = "cv_file_name")
+//    private String cvFileName; // Almacena el nombre del archivo PDF
 
     @CreatedDate
     @Column(updatable = false)
@@ -61,7 +51,6 @@ public class Empleo {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
 
 
 }
