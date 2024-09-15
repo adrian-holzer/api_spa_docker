@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     environment:
-      DB_URL: jdbc:mysql://api_spa_db:3306/api_spa_sentirse_bien?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_URL: ${DB_URL}
       DB_USER_NAME: ${DB_USER_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_MAIL_HOST: smtp.gmail.com
