@@ -105,7 +105,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
 
                 // TURNOS
-                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE","SECRETARIO")
 
                 .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")

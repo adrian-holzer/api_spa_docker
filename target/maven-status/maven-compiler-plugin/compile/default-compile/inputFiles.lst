@@ -4,13 +4,17 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\security\JwtAuthenticationEntryPoint.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\TurnoService.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IPostulacionRepository.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Pago.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Profesional.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerPago.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\EmailService.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerAuth.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\security\SecurityConfig.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Turno.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerTurno.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\EstadoPago.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IUsuariosRepository.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoPago.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\EstadoEmpleo.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Postulacion.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IClienteRepository.java
@@ -20,7 +24,9 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\CategoriaServicio.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerServicio.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\EmpleoService.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerProfesional.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Usuarios.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IPagoRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Servicio.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoRespuesta.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IConsultaRepository.java
@@ -42,6 +48,7 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoLogin.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\security\JwtAuthenticationFilter.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoEmpleo.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerCliente.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Comentario.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\PostulacionService.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerPostulacion.java
@@ -49,7 +56,10 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\ICategoriaServicioRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IRespuestaRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\ApiSpaApplication.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\MetodoPago.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IComentarioRepository.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\PagoService.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoAsignarTurno.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\ITurnoRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoPostulacion.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Consulta.java
@@ -59,6 +69,7 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoRegistro.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IServicioRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\UsuarioService.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\ClienteService.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\DiaSemana.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\HorarioLaboral.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\DtoServicio.java

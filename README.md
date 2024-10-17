@@ -287,3 +287,116 @@ GET - {{host}}/api/empleo/1/postulaciones >El 1 es el id del empleo
 Descargar el cv de la postulacion  (solo PROFESIONALES)
 
 GET - {{host}}/api/postulacion/download/1  > el 1 es de la postulacion
+
+
+
+
+
+
+# ******** MODIFICACIONES *********
+
+
+Alta de Turno (Horarios Disponibles) >>> Solo para Admin , Profesional, Secretario
+
+POST {{host}}/api/turno/crear
+
+*** Utilizo la ruta de listar profesionales para cargar los prof y seleccionar uno
+
+*** Verificar que no se pueda seleccionar fechas hacia atras en el tiempo
+
+{
+"idProfesional": 3,
+"fecha": "2024-10-26",
+"horaInicio": "08:00"
+}
+
+
+
+Asignar un Turno (El cliente selecciona el dia y el horario del turno que desea) >> Solo accede el Cliente
+
+*** Selecciona fecha 
+
+
+*** Utilizar la ruta de turnos disponibles segun la fecha seleccionada
+para cargar los horarios (solo hora de inicio)>> la hora final se calcula segun los servicios cargados
+
+
+GET {{host}}/api/turno/disponibles?fecha=2024-10-26   >> Para CLIENTES , PROFESIONAL, ADMIN, SECRETARIO
+
+
+
+*** Utilizar la ruta para listar servicios para cargar y poder seleccionar
+
+
+POST {{host}}/api/turno/asignar
+
+
+{
+"idTurno": 1,
+"servicioIds": [1, 2]
+}
+(Desde el front se controla el poder eliminar un servicio seleccionado para agregar otro etc)
+
+
+
+Procesar Pago >>> Solo accede el Cliente (Un boton que permita ver el form de pago, se completa el mismo
+y con esta ruta se realiza el pago enviando los datos)
+
+
+*** Utilizar la ruta MIS TURNOS >> para seleccionar el turno a pagar
+
+POST {{host}}/api/pago/procesar
+
+
+{
+"turnoId": 1,
+"numTarjeta": "12345678901234567890",
+"nombreTitular": "John Doe",
+"vencimiento": "12/25",
+"codSeguridad": "123",
+"metodoPago": "CREDITO"
+}
+
+
+(Validar desde el front cada dato que se ingresa en los input ) >> Metodo de pago puede ser CREDITO O DEBITO
+
+
+Enviar Factura por email >>> Accede el cliente >> Esta ruta se utiliza despues de realizar el pago , si  es exitoso , el front genera la factura o comprobante
+en formato pdf y se envia por esta ruta que se encarga de enviar al email del cliente logueado (Que esta realizando el proceso)
+
+
+POST {{host}}/api/pago/enviar-factura
+
+*** Envio en el formulario el atributo "factura" con el pdf adjunto
+
+
+### ************ Otras rutas Rutas necesarias para realizar todo el proceso de pago ***************
+
+
+
+Listado de Profesionales (Para que el admin , profesional o secretario realice el alta del horario se necesita el listado de
+profesionales )
+
+
+GET {{host}}/api/profesional/listar  >> Para admin, profesional y secretario
+
+
+
+Listado de todos los turnos disponibles (Accede el Cliente) >> Se utiliza para poder seleccionar el turno que desea
+
+
+GET {{host}}/api/turno/disponibles
+
+
+
+Buscar turno por id dentro de MIS TURNOS (CLIENTE) (esto srive para el momento de realizar un pago y buscar un turno determinado asignado al cliente logueado)
+
+
+GET {{host}}/api/turno/misTurnos?idTurno=1
+
+
+Buscar todos MIS TURNOS (CLIENTE) (obtengo todos los turnos del Cliente logueado >> por ej para saber que turnos asignados no estan pagados)
+
+
+
+GET {{host}}/api/turno/misTurnos

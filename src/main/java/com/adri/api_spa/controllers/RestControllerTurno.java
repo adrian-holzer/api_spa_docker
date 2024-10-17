@@ -139,20 +139,28 @@ public class RestControllerTurno {
 
 
 
-//  para cliente -- Todos los turnos disponibles
+//   Todos los turnos disponibles y filtrar los disponibles por fecha
+@GetMapping("/disponibles")
+public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha", required = false) String fecha) {
+    try {
+        List<Turno> listadoTurnos;
 
-    @GetMapping("/disponibles")
-    public ResponseEntity<?> obtenerHorariosDisponibles() {
+        if (fecha != null && !fecha.isEmpty()) {
+            // Convertir la fecha de String a LocalDate si se proporciona
+            LocalDate fechaConsulta = LocalDate.parse(fecha);
 
+            // Buscar turnos libres para la fecha específica
+            listadoTurnos = turnoRepository.findByEstadoAndFecha(EstadoTurno.LIBRE, fechaConsulta);
+        } else {
+            // Si no se proporciona fecha, buscar todos los turnos libres
+            listadoTurnos = turnoRepository.findByEstado(EstadoTurno.LIBRE);
+        }
 
-
-        List<Turno> listadoTurnos =  turnoRepository.findByEstado(EstadoTurno.LIBRE);
-
-        return ResponseHandler.generateResponse("Listados de turnos libres  " , HttpStatus.OK,listadoTurnos);
-
-
+        return ResponseHandler.generateResponse("Listado de turnos libres", HttpStatus.OK, listadoTurnos);
+    } catch (DateTimeParseException e) {
+        return ResponseHandler.generateResponse("Formato de fecha inválido", HttpStatus.BAD_REQUEST, null);
     }
-
+}
 
     // para el cliente
     @GetMapping("/misTurnos")

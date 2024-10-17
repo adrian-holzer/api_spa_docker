@@ -45,4 +45,8 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
 
     List<Turno> findByProfesionalAndFechaAndEstadoNot(Profesional profesional, LocalDate fecha, EstadoTurno estado);
 
+
+
+    List<Turno> findByEstadoAndFecha(EstadoTurno estado, LocalDate fecha);
+
 }
