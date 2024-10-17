@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -28,9 +30,12 @@ public class Cliente {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id" , referencedColumnName = "id_usuario")
-    @JsonBackReference
     private Usuarios usuario;
 
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Turno> turnos;
 
 
 }

@@ -70,6 +70,12 @@ public class DataInitializer implements CommandLineRunner {
         }
 
 
+        if (roleRepository.findByName("SECRETARIO").isEmpty()) {
+            Roles secretarioRole = new Roles();
+            secretarioRole.setName("SECRETARIO");
+            roleRepository.save(secretarioRole);
+        }
+
 
 
 // Crear usuario admin
@@ -78,8 +84,8 @@ public class DataInitializer implements CommandLineRunner {
        ;
         usuarios.setUsername("user_admin");
         usuarios.setPassword(passwordEncoder.encode("adminpass"));
-        usuarios.setNombre("jorge");
-        usuarios.setApellido("perez");
+        usuarios.setNombre("Dra");
+        usuarios.setApellido("Sonrisa");
         usuarios.setDni("15555555");
         usuarios.setEmail("admin@email.com");
 
@@ -127,7 +133,7 @@ public class DataInitializer implements CommandLineRunner {
 
 
 
-// Crear profesional
+// Crear profesional 1
 
 
         Usuarios usuariosProf = new Usuarios();
@@ -147,6 +153,8 @@ public class DataInitializer implements CommandLineRunner {
         Roles profRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
         // Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
 
+
+
         // Asignar ambos roles al usuario
         usuariosProf.setRoles(Arrays.asList(profRole));
 
@@ -154,6 +162,69 @@ public class DataInitializer implements CommandLineRunner {
         profesionalService.asignarHorarios(nuevoProf);
 
         usuariosRepository.save(usuariosProf);
+
+// Crear profesional 2
+
+
+
+
+        Usuarios usuariosProf2 = new Usuarios();
+        Profesional nuevoProf2 = new Profesional();
+        usuariosProf2.setUsername("prof2");
+        usuariosProf2.setPassword(passwordEncoder.encode("pass"));
+        usuariosProf2.setNombre("Juan");
+        usuariosProf2.setApellido("Fernandez");
+        usuariosProf2.setDni("20025520");
+        usuariosProf2.setEmail("prof2@email.com");
+
+        usuariosProf2.setProfesional(nuevoProf2);
+        nuevoProf2.setUsuario(usuariosProf2);
+
+
+        // Obtener los roles del repositorio
+        Roles prof2Role = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+        // Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+
+
+
+        // Asignar ambos roles al usuario
+        usuariosProf2.setRoles(Arrays.asList(prof2Role));
+
+
+        profesionalService.asignarHorarios(nuevoProf2);
+
+        usuariosRepository.save(usuariosProf2);
+
+
+
+ // Crear secretario
+
+
+        Usuarios secretario = new Usuarios();
+
+        secretario.setUsername("user_secret");
+        secretario.setPassword(passwordEncoder.encode("secrpass"));
+        secretario.setNombre("Mariana");
+        secretario.setApellido("Perez");
+        secretario.setDni("30025536");
+        secretario.setEmail("secretario@email.com");
+
+
+        // Obtener los roles del repositorio
+        Roles sectretarioRole = roleRepository.findByName("SECRETARIO").orElseThrow(() -> new RuntimeException("Rol SECRETARIO no encontrado"));
+        // Roles profesionalRole = roleRepository.findByName("PROFESIONAL").orElseThrow(() -> new RuntimeException("Rol PROFESIONAL no encontrado"));
+
+        // Asignar ambos roles al usuario
+        secretario.setRoles(Arrays.asList(sectretarioRole));
+
+
+        usuariosRepository.save(secretario);
+
+
+
+
+
+
 
 
 

@@ -2,11 +2,14 @@ package com.adri.api_spa.services;
 
 import com.adri.api_spa.models.*;
 import com.adri.api_spa.repositories.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -288,6 +291,147 @@ public class TurnoService {
             return null; // O lanzar una excepción si prefieres manejar el caso de otra forma
         }
 
+    }
+
+
+
+//
+//
+//    public List<Turno> findByProfesionalAndOrderByHoraInicioAsc(Profesional p){
+//
+//
+//       return  turnoRepository.findByProfesionalAndOrderByHoraInicioAsc(p);
+//    }
+
+
+
+
+
+
+
+
+
+
+
+    // MODIFICACIONES
+
+
+
+
+    // Para profesionales , admin , secretaria
+
+    public  Turno crearTurno(Turno turno){
+
+
+        // Verifica si ya existe un turno asignado para el profesional en el mismo horario, excluyendo los cancelados
+        Optional<Turno> turnoExistente = turnoRepository.findByProfesionalAndFechaAndHoraInicioAndEstadoNot(
+                turno.getProfesional(), turno.getFecha(), turno.getHoraInicio(), EstadoTurno.CANCELADO
+        );
+
+
+        if (turnoExistente.isPresent()) {
+            throw new RuntimeException("El profesional ya tiene un turno asignado en este horario.");
+        }
+
+
+
+
+
+
+        // Asigna el estado 'LIBRE' ya que aún no se ha asignado el cliente ni los servicios
+        turno.setEstado(EstadoTurno.LIBRE);
+
+        // El cliente aún no se ha asignado
+        turno.setCliente(null);
+
+        // Aun no esta asignado
+
+        turno.setFechaAsignacionTurno(null);
+
+        turno.setServicios(null);
+
+        turno.setHoraFin(null);
+
+
+
+        // Guarda el turno como un horario disponible en la agenda del profesional
+        return turnoRepository.save(turno);
+
+    }
+
+
+
+  // Asignar un turno a un cliente
+
+
+    public Turno asignarTurno(Long turnoId, Cliente cliente, Set<Servicio> servicios) {
+        // Busca el turno por su ID
+        Turno turno = turnoRepository.findById(turnoId)
+                .orElseThrow(() -> new RuntimeException("Turno no encontrado"));
+
+        // Obtener la fecha y hora actuales
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fechaHoraTurno = LocalDateTime.of(turno.getFecha(), turno.getHoraInicio());
+
+        // Verificar que el turno sea al menos 48 horas en el futuro
+        if (fechaHoraTurno.isBefore(ahora.plusHours(48))) {
+            throw new RuntimeException("No se puede asignar un turno con menos de 48 horas de anticipación.");
+        }
+
+        // Asigna el cliente al turno
+        turno.setCliente(cliente);
+
+        // Asigna los servicios seleccionados por el cliente
+        turno.setServicios(servicios);
+
+        // Calcula la nueva hora de fin basándose en la duración de los servicios
+        int duracionTotal = servicios.stream().mapToInt(Servicio::getDuracionMinutos).sum();
+        turno.setHoraFin(turno.getHoraInicio().plusMinutes(duracionTotal));
+
+        // Cambia el estado del turno a ASIGNADO
+        turno.setEstado(EstadoTurno.ASIGNADO);
+
+        turno.setFechaAsignacionTurno(LocalDateTime.now());
+
+
+        // El pago se deja como null ya que se procesará después
+        turno.setPago(null);
+
+        // Guarda los cambios en el turno
+        return turnoRepository.save(turno);
+    }
+
+
+    // Método que se ejecuta automáticamente para verificar y liberar turnos no pagados después de 48 horas
+    @Scheduled(fixedRate = 3600000) // Se ejecuta cada 1 hora
+    @Transactional
+    public void eliminarTurnosNoPagados48Horas() {
+        // Obtener la fecha y hora actuales
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Buscar todos los turnos que están en estado ASIGNADO y aún no están pagados
+        List<Turno> turnosAsignados = turnoRepository.findByEstadoAndPagoIsNull(EstadoTurno.ASIGNADO);
+
+        // Recorrer la lista de turnos para verificar si han pasado más de 48 horas desde la asignación
+        for (Turno turno : turnosAsignados) {
+            // Obtener la fecha y hora de asignación del turno
+            LocalDateTime fechaAsignacion = turno.getFechaAsignacionTurno();
+
+            // Verificar si han pasado más de 48 horas desde la asignación del turno
+            if (fechaAsignacion != null && ahora.isAfter(fechaAsignacion.plusHours(48))) {
+                // Liberar el turno en lugar de eliminarlo
+                turno.setCliente(null);               // 1. Quitar el cliente
+                turno.setFechaAsignacionTurno(null);  // 2. Dejar en null la fecha de asignación
+                turno.getServicios().clear();         // 3. Eliminar los servicios asociados
+                turno.setEstado(EstadoTurno.LIBRE);   // 4. Cambiar el estado a "LIBRE" o estado similar
+
+                // Guardar los cambios en el turno liberado
+                turnoRepository.save(turno);
+
+                // Log o salida informativa
+                System.out.println("Turno con ID " + turno.getIdTurno() + " liberado por no haber sido pagado en 48 horas.");
+            }
+        }
     }
 
 

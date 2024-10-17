@@ -76,35 +76,63 @@ public class SecurityConfig {
 
                 // *** DATOS DE PRUEBA ** //
 
+
+                // AUTH
+
                 .requestMatchers("/api/auth/registerCliente").permitAll()
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/userLogueado").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
                 .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
+
+
+                // CONSULTAS
                 .requestMatchers(HttpMethod.POST, "/api/consulta/crear").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/consulta/{idConsulta}/respuestas/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET, "/api/consulta/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET, "/api/consulta/").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET, "/api/consulta/{idConsulta}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+                //COMENTARIOS
                 .requestMatchers(HttpMethod.POST,"/api/comentario/crear").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/comentario/listar").permitAll()
+
+                // SERVICIOS
+
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/{idServicio}").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/categorias").permitAll()
                 .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
+
+                // TURNOS
+                .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("CLIENTE")
+
                 .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.POST, "/api/turno/asignar").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/turno/misTurnos").hasAuthority("CLIENTE")
+
                 .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+                // EMPLEOS
+
                 .requestMatchers(HttpMethod.POST,"/api/empleo/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/empleo/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/empleo/{id}/postulaciones").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-
                 .requestMatchers(HttpMethod.POST,"/api/postulacion/upload").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/postulacion/download/{id}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+
+
+                // PAGOS
+                .requestMatchers(HttpMethod.POST,"/api/pago/procesar").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.POST,"/api/pago/enviar-factura").hasAuthority("CLIENTE")
+
+
+                // PROFESIONALES
+
+                .requestMatchers(HttpMethod.GET,"/api/profesional/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
 
 
                 .anyRequest().authenticated()

@@ -29,7 +29,6 @@ public class Profesional {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id" , referencedColumnName = "id_usuario")
-    @JsonBackReference
     private Usuarios usuario;
 
 
@@ -39,6 +38,7 @@ public class Profesional {
             joinColumns = @JoinColumn(name = "id_profesional"),
             inverseJoinColumns = @JoinColumn(name = "id_horario_laboral")
     )
+    @JsonBackReference
     private List<HorarioLaboral> horariosLaborales = new ArrayList<>();
 
     @OneToMany(mappedBy = "profesional",fetch = FetchType.EAGER, cascade = CascadeType.ALL)

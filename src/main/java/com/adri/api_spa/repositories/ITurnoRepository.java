@@ -7,8 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ITurnoRepository extends JpaRepository<Turno, Long> {
@@ -28,7 +30,19 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
 
     List<Turno> findByEstado(EstadoTurno estado);
 
+//
+//    List<Turno> findByProfesionalAndOrderByHoraInicioAsc(
+//            Profesional profesional
+//
+//    );
 
 
+
+    Optional<Turno> findByProfesionalAndFechaAndHoraInicioAndEstadoNot(
+            Profesional profesional, LocalDate fecha, LocalTime horaInicio, EstadoTurno estado);
+
+    List<Turno> findByEstadoAndPagoIsNull(EstadoTurno estado);
+
+    List<Turno> findByProfesionalAndFechaAndEstadoNot(Profesional profesional, LocalDate fecha, EstadoTurno estado);
 
 }

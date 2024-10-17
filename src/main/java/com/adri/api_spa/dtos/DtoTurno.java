@@ -13,11 +13,7 @@ import java.time.LocalTime;
 @Data
 public class DtoTurno {
 
-
-
-    private String id_cliente;
-
-    private String id_servicio;
+    private Long idProfesional;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fecha;
@@ -25,6 +21,7 @@ public class DtoTurno {
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime horaInicio;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private LocalTime horaFin;
+
+
+
 }

@@ -1,19 +1,19 @@
 package com.adri.api_spa.services;
 
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.AddressException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
+import jakarta.activation.DataHandler;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import jakarta.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -105,4 +105,56 @@ public class EmailService {
         }
 
     }
-}
+
+
+
+    public void enviarFacturaPorEmail(String destinatario, MultipartFile factura, String host, String port, String userName, String password) throws MessagingException, IOException {
+        // Configurar propiedades del servidor SMTP
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.user", userName);
+
+        // Crear una nueva sesión sin autenticador
+        Session session = Session.getDefaultInstance(properties);
+
+        // Crear un nuevo mensaje de correo electrónico
+        MimeMessage message = new MimeMessage(session);
+
+        // Configurar remitente
+        message.setFrom(new InternetAddress(userName));
+
+        // Configurar destinatario
+        InternetAddress[] toAddresses = { new InternetAddress(destinatario) };
+        message.setRecipients(Message.RecipientType.TO, toAddresses);
+
+        // Asunto y cuerpo del mensaje
+        message.setSubject("Factura de tu pago");
+        message.setSentDate(new Date());
+
+        // Crear el cuerpo del mensaje
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setText("Adjuntamos la factura de tu pago.");
+
+        // Crear el adjunto utilizando un InputStream de MultipartFile
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        attachmentPart.setFileName("factura.pdf");
+        attachmentPart.setDataHandler(new DataHandler(new ByteArrayDataSource(factura.getInputStream(), factura.getContentType())));
+
+        // Crear el multipart para adjuntar el cuerpo y el archivo
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        multipart.addBodyPart(attachmentPart);
+
+        // Agregar el multipart al mensaje
+        message.setContent(multipart);
+
+        // Enviar el correo electrónico
+        Transport transport = session.getTransport("smtp");
+        transport.connect(userName, password);
+        transport.sendMessage(message, message.getAllRecipients());
+        transport.close();
+    }
+    }

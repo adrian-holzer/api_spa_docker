@@ -1,12 +1,15 @@
 package com.adri.api_spa.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,9 +28,17 @@ public class Turno {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @ManyToOne
-    @JoinColumn(name = "id_servicio")
-    private Servicio servicio;
+    // Relación Many-to-Many con Servicio
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "turno_servicio",
+            joinColumns = @JoinColumn(name = "id_turno"),
+            inverseJoinColumns = @JoinColumn(name = "id_servicio")
+    )
+    private Set<Servicio> servicios = new HashSet<>();
+
+
 
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinTable(
@@ -46,7 +57,21 @@ public class Turno {
     private LocalTime horaInicio;
     private LocalTime horaFin;
 
+    @OneToOne(mappedBy = "turno")
+    private Pago pago;  // El turno tiene un pago
+
+
     @Enumerated(EnumType.STRING)
     private EstadoTurno estado;
+
+
+    private LocalDateTime fechaAsignacionTurno;
+
+//
+//    @PrePersist
+//    protected void onCreate() {
+//        this.fechaCreacionTurno = LocalDateTime.now();
+//    }
+
 
 }
