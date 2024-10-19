@@ -400,3 +400,29 @@ Buscar todos MIS TURNOS (CLIENTE) (obtengo todos los turnos del Cliente logueado
 
 
 GET {{host}}/api/turno/misTurnos`
+
+
+Registrar Secretario (lO PUEDE HACER EL ADMIN) 
+
+***** Admin por defecto ********
+
+{
+
+"username" : "user_admin",
+"password" : "adminpass"
+}
+
+****************************
+
+
+POST {{host}}/api/auth/registerSecretario
+
+
+{
+"username" : "sec1",
+"password" : "pass" ,
+"dni" : "35525569",
+"email": "sec1@email.com",
+"nombre" :  "Maria",
+"apellido": "Martinez"
+}

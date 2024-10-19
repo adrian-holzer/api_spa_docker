@@ -184,6 +184,36 @@ public class RestControllerAuth {
 
 
 
+    //Método para poder guardar usuarios de tipo Profesionales
+
+    @PostMapping("registerSecretario")
+    public ResponseEntity<?> registrarSecretario(@Valid @RequestBody DtoRegistro dtoRegistro, Errors errors) {
+
+
+        if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
+
+
+            return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
+        }
+
+        Usuarios usuarios = new Usuarios();
+        usuarios.setUsername(dtoRegistro.getUsername());
+        usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+        usuarios.setNombre(dtoRegistro.getNombre());
+        usuarios.setApellido(dtoRegistro.getApellido());
+        usuarios.setEmail(dtoRegistro.getEmail());
+        usuarios.setDni(dtoRegistro.getDni());
+
+        Roles roles = rolesRepository.findByName("SECRETARIO").get();
+        usuarios.setRoles(Collections.singletonList(roles));
+        usuariosRepository.save(usuarios);
+
+        return new ResponseEntity<>("Registro de Secretario exitoso", HttpStatus.OK);
+    }
+
+
+
+
     //Método para poder logear un usuario y obtener un token
     @PostMapping("login")
     public ResponseEntity<DtoAuthRespuesta> login(@RequestBody DtoLogin dtoLogin) {
