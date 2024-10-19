@@ -28,7 +28,6 @@ public class Pago {
 
     @OneToOne
     @JoinColumn(name = "turno_id")
-    @JsonBackReference
     private Turno turno;
 
     @Enumerated(EnumType.STRING)

@@ -58,6 +58,7 @@ public class Turno {
     private LocalTime horaFin;
 
     @OneToOne(mappedBy = "turno")
+    @JsonBackReference
     private Pago pago;  // El turno tiene un pago
 
 

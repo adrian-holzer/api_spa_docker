@@ -294,7 +294,7 @@ GET - {{host}}/api/postulacion/download/1  > el 1 es de la postulacion
 
 
 # ******** MODIFICACIONES *********
-
+`
 
 Alta de Turno (Horarios Disponibles) >>> Solo para Admin , Profesional, Secretario
 
@@ -399,4 +399,4 @@ Buscar todos MIS TURNOS (CLIENTE) (obtengo todos los turnos del Cliente logueado
 
 
 
-GET {{host}}/api/turno/misTurnos
+GET {{host}}/api/turno/misTurnos`

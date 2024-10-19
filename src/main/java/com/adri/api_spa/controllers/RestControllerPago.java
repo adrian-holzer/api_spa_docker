@@ -1,5 +1,6 @@
 package com.adri.api_spa.controllers;
 
+import com.adri.api_spa.Utils.ApiError;
 import com.adri.api_spa.Utils.ResponseHandler;
 import com.adri.api_spa.dtos.DtoPago;
 import com.adri.api_spa.models.Cliente;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,9 +50,15 @@ public class RestControllerPago {
     String password ;
 
     @PostMapping("/procesar")
-    public ResponseEntity<?> procesarPago(@Validated @RequestBody DtoPago pagoDTO) {
+    public ResponseEntity<?> procesarPago(@Validated @RequestBody DtoPago pagoDTO, Errors errors) {
         try {
 
+
+            if (errors.hasErrors()){
+
+                return ResponseHandler.generateResponse("Complete los datos correctamente",HttpStatus.BAD_REQUEST,new ApiError(errors).getErrores());
+
+            }
 
             Turno turno = turnoRepository.findById(pagoDTO.getTurnoId())
                     .orElseThrow(() -> new RuntimeException("Turno con ID " + pagoDTO.getTurnoId() + " no encontrado"));
