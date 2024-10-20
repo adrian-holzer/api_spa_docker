@@ -203,7 +203,6 @@ public class RestControllerAuth {
         usuarios.setApellido(dtoRegistro.getApellido());
         usuarios.setEmail(dtoRegistro.getEmail());
         usuarios.setDni(dtoRegistro.getDni());
-
         Roles roles = rolesRepository.findByName("SECRETARIO").get();
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);

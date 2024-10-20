@@ -34,7 +34,7 @@ public class RestControllerCliente {
     private ITurnoRepository turnoRepository;
 
 
-    // Listado de todos los clientes
+    // - Listado de todos los clientes registrados
 
     @GetMapping("/listar")
     public ResponseEntity<?> getClientes() {

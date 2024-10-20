@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class PagoService {
 
@@ -86,6 +89,8 @@ public class PagoService {
     }
 
 
-
+    public List<Object[]> obtenerIngresosPorTipoDePagoEnRangoDeFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        return pagoRepository.findIngresosPorTipoDePagoEnRangoDeFechas(fechaInicio, fechaFin);
+    }
 }
 

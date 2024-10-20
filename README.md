@@ -426,3 +426,48 @@ POST {{host}}/api/auth/registerSecretario
 "nombre" :  "Maria",
 "apellido": "Martinez"
 }
+
+
+
+
+## LISTADOS 
+
+- finalizar turno (profesional o admin)
+
+POST {{host}}/api/turno/finalizarTurno/1
+
+
+- Listado de todos los clientes registrados
+
+GET {{host}}/api/cliente/listar
+
+
+- Listados de clientes asignados a un profesional (Listado de clientes por profesional ordenado por horario.) (Pagados y no pagados)
+
+
+Se selecciona una fecha en particular los turnos (clientes) para ese dia y se puede filtrar entre 
+los pagados y no pagados
+
+GET {{host}}/api/turno/asignados/por-profesional?idProfesional=2&fecha=2024-11-06&pagado=false
+
+GET {{host}}/api/turno/asignados/por-profesional?idProfesional=1&fecha=2024-11-06&pagado=true
+
+
+
+- Listado de pagos realizados por un cliente especifico (Secretaria: Acceso a los pagos que se realizan.)
+
+GET {{host}}/api/pago/cliente/1
+
+
+
+- Listado de los ingresos recibidos en total, en un rango de fecha especifico
+(Informe de Ingresos en un rango de fecha a ingresar por teclado discriminado por tipo de pago.)
+
+GET {{host}}/api/pago/ingresos?fechaInicio=2024-10-19&fechaFin=2024-10-25
+
+
+- Listado de los servicios que realizo un profesional
+(Informe de servicios realizados por profesional en un rango de fecha que se ingresa por teclado)
+
+GET {{host}}/api/turno/profesional/servicios?idProfesional=1&fechaInicio=2024-10-20&fechaFin=2024-10-25
+

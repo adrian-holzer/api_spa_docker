@@ -49,4 +49,13 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
 
     List<Turno> findByEstadoAndFecha(EstadoTurno estado, LocalDate fecha);
 
+    List<Turno> findByProfesionalAndFechaAndEstadoAndPagoIsNotNullOrderByHoraInicioAsc(Profesional profesional, LocalDate fecha, EstadoTurno estado);
+    List<Turno> findByProfesionalAndFechaAndEstadoAndPagoIsNullOrderByHoraInicioAsc(Profesional profesional, LocalDate fecha, EstadoTurno estado);
+    List<Turno> findByProfesionalAndFechaAndEstadoOrderByHoraInicioAsc(
+            Profesional profesional, LocalDate fecha, EstadoTurno estado);
+    // Obtener turnos por profesional en estado FINALIZADO dentro de un rango de fechas
+    List<Turno> findByProfesionalAndFechaBetweenAndEstado(
+            Profesional profesional, LocalDate fechaInicio, LocalDate fechaFin, EstadoTurno estado);
+
+
 }

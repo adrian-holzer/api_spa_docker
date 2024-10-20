@@ -270,8 +270,9 @@ public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha
     }
 
 // Solo para profesionales o admin
-    @PutMapping("/finalizarTurno/{idTurno}")
-    public ResponseEntity<?> finalizarTurno(@RequestParam Long idTurno) {
+
+    @PostMapping("/finalizarTurno/{idTurno}")
+    public ResponseEntity<?> finalizarTurno(@PathVariable Long idTurno) {
 
         Turno turno = turnoRepository.findById(idTurno).isPresent() ? turnoRepository.findById(idTurno).get()  : null ;
 
@@ -281,20 +282,62 @@ public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha
         }
 
 
-        turno.setEstado(EstadoTurno.CANCELADO);
+        turno.setEstado(EstadoTurno.FINALIZADO);
         turnoRepository.save(turno);
 
-
-
-        return ResponseHandler.generateResponse("Se ha cancelado el turno con id " + idTurno, HttpStatus.OK,turno);
-
-
+        return ResponseHandler.generateResponse("Se ha finalizado el turno con id " + idTurno, HttpStatus.OK,turno);
 
     }
 
 
 
 // MODIFICACIONES
+
+    @GetMapping("/asignados/por-profesional")
+    public ResponseEntity<?> obtenerTurnosAsignadosPorProfesionalYFecha(
+            @RequestParam("idProfesional") Long idProfesional,
+            @RequestParam("fecha") String fecha,
+            @RequestParam(value = "pagado", required = false) Boolean pagado) {
+
+
+
+        System.out.println(pagado);
+
+        Profesional profesional = profesionalRepository.findById(idProfesional).orElseThrow(() -> new RuntimeException("Profesional no encontrado"));
+
+        try {
+            // Convertir la fecha de String a LocalDate
+            LocalDate fechaConsulta = LocalDate.parse(fecha);
+
+            // Variable para almacenar los turnos
+            List<Turno> turnosAsignados;
+
+            // Verificar si el parámetro "pagado" fue enviado
+            if (pagado != null) {
+                if (pagado) {
+                    // Buscar los turnos pagados (pago no es null)
+                    turnosAsignados = turnoRepository.findByProfesionalAndFechaAndEstadoAndPagoIsNotNullOrderByHoraInicioAsc(
+                            profesional, fechaConsulta, EstadoTurno.PAGADO);
+                } else {
+                    // Buscar los turnos no pagados (pago es null)
+                    turnosAsignados = turnoRepository.findByProfesionalAndFechaAndEstadoAndPagoIsNullOrderByHoraInicioAsc(
+                            profesional, fechaConsulta, EstadoTurno.ASIGNADO);
+                }
+            } else {
+                // Si no se especifica el parámetro pagado, buscar todos los turnos asignados, sin importar si están pagados o no
+                turnosAsignados = turnoRepository.findByProfesionalAndFechaAndEstadoOrderByHoraInicioAsc(
+                        profesional, fechaConsulta, EstadoTurno.ASIGNADO);
+            }
+
+            if (turnosAsignados.isEmpty()) {
+                return ResponseHandler.generateResponse("No se encontraron turnos .", HttpStatus.NOT_FOUND, null);
+            }
+
+            return ResponseHandler.generateResponse("Turnos asignados encontrados", HttpStatus.OK, turnosAsignados);
+        } catch (DateTimeParseException e) {
+            return ResponseHandler.generateResponse("Formato de fecha inválido", HttpStatus.BAD_REQUEST, null);
+        }
+    }
 
 
 
@@ -368,21 +411,55 @@ public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha
 
 
 
+    //// Listado de los servicios que realizo un profesional
+    // (Informe de servicios realizados por profesional en un rango de fecha que se ingresa por teclado)
 
-    //    @PostMapping("/procesar")
-//    public ResponseEntity<?> procesarPago(@RequestBody DtoPago pagoDto) {
-//        // Buscamos el turno por su ID
-//        Turno turno = turnoService.readOne(pagoDto.getTurnoId()).get();
-//
-//        // Procesamos el pago
-//        Pago pago = pagoService.crearPago(turno, pagoDto.getMetodoPago(), pagoDto.getMonto());
-//
-//        if ("Completado".equals(pago.getEstadoPago())) {
-//            return ResponseEntity.ok("Pago completado y factura enviada");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al procesar el pago");
-//        }
-//    }
+    @GetMapping("/profesional/servicios")
+    public ResponseEntity<?> obtenerServiciosRealizadosPorProfesional(
+            @RequestParam("idProfesional") Long idProfesional,
+            @RequestParam("fechaInicio") String fechaInicio,
+            @RequestParam("fechaFin") String fechaFin) {
+
+
+
+        Profesional profesional = profesionalRepository.findById(idProfesional).isPresent() ? profesionalRepository.findById(idProfesional).get()  : null ;
+
+        try {
+            // Convertir las fechas de String a LocalDate
+            LocalDate inicio = LocalDate.parse(fechaInicio);
+            LocalDate fin = LocalDate.parse(fechaFin);
+
+//            // Verificar que las fechas estén en el pasado
+//            LocalDate hoy = LocalDate.now();
+//            if (inicio.isAfter(hoy) || fin.isAfter(hoy)) {
+//                return ResponseHandler.generateResponse("Las fechas deben estar en el pasado.", HttpStatus.BAD_REQUEST, null);
+//            }
+
+            // Validar que la fecha de inicio no sea posterior a la fecha de fin
+            if (inicio.isAfter(fin)) {
+                return ResponseHandler.generateResponse("La fecha de inicio no puede ser posterior a la fecha de fin.", HttpStatus.BAD_REQUEST, null);
+            }
+
+            // Obtener los servicios realizados por el profesional
+            List<Map<String, String>> serviciosRealizados = turnoService.obtenerServiciosRealizadosPorProfesional(
+                    profesional, inicio, fin);
+
+            // Si no se encontraron servicios, retornar un mensaje
+            if (serviciosRealizados.isEmpty()) {
+                return ResponseHandler.generateResponse("No se encontraron servicios realizados para el profesional en el rango de fechas dado.", HttpStatus.NOT_FOUND, null);
+            }
+
+            // Retornar la lista de servicios realizados
+            return ResponseHandler.generateResponse("Servicios realizados encontrados", HttpStatus.OK, serviciosRealizados);
+
+        } catch (DateTimeParseException e) {
+            // Manejar error de formato de fecha
+            return ResponseHandler.generateResponse("Formato de fecha inválido. Use el formato 'YYYY-MM-DD'.", HttpStatus.BAD_REQUEST, null);
+        } catch (Exception e) {
+            // Manejar otros errores no previstos
+            return ResponseHandler.generateResponse("Ocurrió un error al procesar la solicitud.", HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
 
 
 

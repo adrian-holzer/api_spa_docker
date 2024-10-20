@@ -114,9 +114,14 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/turno/asignar").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL")
                 .requestMatchers(HttpMethod.GET,"/api/turno/misTurnos").hasAuthority("CLIENTE")
-
                 .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
                 .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST,"/api/turno/finalizarTurno/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"api/turno/asignados/por-profesional").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"api/turno/profesional/servicios").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+
+
+
 
                 // EMPLEOS
 
@@ -130,11 +135,18 @@ public class SecurityConfig {
                 // PAGOS
                 .requestMatchers(HttpMethod.POST,"/api/pago/procesar").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.POST,"/api/pago/enviar-factura").hasAuthority("CLIENTE")
+                .requestMatchers(HttpMethod.GET,"/api/pago/cliente/{idCliente}").hasAuthority("SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"/api/pago/ingresos").hasAuthority("SECRETARIO")
 
 
                 // PROFESIONALES
 
                 .requestMatchers(HttpMethod.GET,"/api/profesional/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+
+
+                // CLIENTES
+
+                .requestMatchers(HttpMethod.GET,"/api/cliente/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
 
 
                 .anyRequest().authenticated()

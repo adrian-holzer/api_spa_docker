@@ -435,7 +435,25 @@ public class TurnoService {
     }
 
 
+    // Obtener los servicios realizados por un profesional en un rango de fechas
+    public List<Map<String, String>> obtenerServiciosRealizadosPorProfesional(Profesional profesional, LocalDate fechaInicio, LocalDate fechaFin) {
+        // Obtener los turnos finalizados dentro del rango de fechas
+        List<Turno> turnosFinalizados = turnoRepository.findByProfesionalAndFechaBetweenAndEstado(
+                profesional, fechaInicio, fechaFin, EstadoTurno.FINALIZADO);
 
+        // Si no hay turnos, devolver una lista vacía
+        if (turnosFinalizados.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Extraer los servicios de los turnos finalizados
+        return turnosFinalizados.stream()
+                .flatMap(turno -> turno.getServicios().stream()  // Obtener los servicios de cada turno
+                        .map(servicio -> Map.of(
+                                "nombreServicio", servicio.getDetallesServicio(),
+                                "fechaRealizacion", turno.getFecha().toString())))  // Mapeo de nombre del servicio y fecha
+                .collect(Collectors.toList());
+    }
 
 
 
