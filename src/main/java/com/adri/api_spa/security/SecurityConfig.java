@@ -104,19 +104,19 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listar").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/{idServicio}").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/servicio/categorias").permitAll()
-                .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST,"/api/servicio/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
 
                 // TURNOS
                 .requestMatchers(HttpMethod.GET, "/api/turno/disponibles").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE","SECRETARIO")
 
-                .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/turno/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.POST, "/api/turno/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.POST, "/api/turno/asignar").hasAuthority("CLIENTE")
-                .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST, "/api/turno/por-fecha").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.GET,"/api/turno/misTurnos").hasAuthority("CLIENTE")
-                .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE")
-                .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
-                .requestMatchers(HttpMethod.POST,"/api/turno/finalizarTurno/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.DELETE,"/api/turno/cancelar/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","CLIENTE","SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"/api/turno/cliente/{idCliente}").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.POST,"/api/turno/finalizarTurno/{idTurno}").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO","CLIENTE")
                 .requestMatchers(HttpMethod.GET,"api/turno/asignados/por-profesional").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.GET,"api/turno/profesional/servicios").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
 
@@ -125,18 +125,18 @@ public class SecurityConfig {
 
                 // EMPLEOS
 
-                .requestMatchers(HttpMethod.POST,"/api/empleo/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.POST,"/api/empleo/crear").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.GET,"/api/empleo/listar").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/empleo/{id}/postulaciones").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/empleo/{id}/postulaciones").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
                 .requestMatchers(HttpMethod.POST,"/api/postulacion/upload").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/postulacion/download/{id}").hasAnyAuthority("ADMIN" , "PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/postulacion/download/{id}").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
 
 
                 // PAGOS
                 .requestMatchers(HttpMethod.POST,"/api/pago/procesar").hasAuthority("CLIENTE")
                 .requestMatchers(HttpMethod.POST,"/api/pago/enviar-factura").hasAuthority("CLIENTE")
-                .requestMatchers(HttpMethod.GET,"/api/pago/cliente/{idCliente}").hasAuthority("SECRETARIO")
-                .requestMatchers(HttpMethod.GET,"/api/pago/ingresos").hasAuthority("SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"/api/pago/cliente/{idCliente}").hasAnyAuthority("SECRETARIO","ADMIN","PROFESIONAL")
+                .requestMatchers(HttpMethod.GET,"/api/pago/ingresos").hasAnyAuthority("SECRETARIO","ADMIN","PROFESIONAL")
 
 
                 // PROFESIONALES

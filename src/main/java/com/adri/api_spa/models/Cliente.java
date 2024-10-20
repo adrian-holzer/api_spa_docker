@@ -33,7 +33,7 @@ public class Cliente {
     private Usuarios usuario;
 
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<Turno> turnos;
 
