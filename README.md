@@ -432,7 +432,7 @@ POST {{host}}/api/auth/registerSecretario
 
 ## LISTADOS 
 
-- finalizar turno (profesional o admin)
+- finalizar turno (profesional o admin) >> Esto se usa solo cuando el turno se atendio y esta terminado
 
 POST {{host}}/api/turno/finalizarTurno/1
 
