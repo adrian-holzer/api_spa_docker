@@ -35,7 +35,7 @@ public class Cliente {
 
 
     @OneToMany(mappedBy = "cliente",fetch = FetchType.EAGER)
-    @JsonIgnore
+    @JsonBackReference
     private List<Turno> turnos;
 
 

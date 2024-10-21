@@ -57,5 +57,9 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
     List<Turno> findByProfesionalAndFechaBetweenAndEstado(
             Profesional profesional, LocalDate fechaInicio, LocalDate fechaFin, EstadoTurno estado);
 
+    // Consulta para buscar turnos donde el cliente no es nulo y el pago es nulo
+    @Query("SELECT t FROM Turno t WHERE t.cliente IS NOT NULL AND t.pago IS NULL")
+    List<Turno> findTurnosWhereClienteIsNotNullAndPagoIsNull();
 
+    List<Turno> findByClienteIsNotNullAndPagoIsNull();
 }

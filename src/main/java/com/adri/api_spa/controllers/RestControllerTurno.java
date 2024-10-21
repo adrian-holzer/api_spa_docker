@@ -78,7 +78,9 @@ public class RestControllerTurno {
 
             if (estado.equalsIgnoreCase("asignado")){
 
-               List<Turno> listadoTurnos =  turnoRepository.findByEstado(EstadoTurno.ASIGNADO);
+              List<Turno> listadoTurnos =  turnoRepository.findByEstado(EstadoTurno.ASIGNADO);
+
+
                 return ResponseHandler.generateResponse("Listados de turnos asignados  " , HttpStatus.OK,listadoTurnos);
 
 
