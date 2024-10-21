@@ -3,15 +3,14 @@ package com.adri.api_spa.controllers;
 
 import com.adri.api_spa.Utils.ResponseHandler;
 import com.adri.api_spa.dtos.ClienteDto;
-import com.adri.api_spa.models.Cliente;
-import com.adri.api_spa.models.Empleo;
-import com.adri.api_spa.models.Postulacion;
-import com.adri.api_spa.models.Turno;
+import com.adri.api_spa.models.*;
 import com.adri.api_spa.repositories.IClienteRepository;
 import com.adri.api_spa.repositories.ITurnoRepository;
+import com.adri.api_spa.repositories.IUsuariosRepository;
 import com.adri.api_spa.services.ClienteService;
 import com.adri.api_spa.services.EmpleoService;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,9 @@ public class RestControllerCliente {
     private IClienteRepository clienteRepository;
 
     @Autowired
+    private IUsuariosRepository usuariosRepository;
+
+    @Autowired
     private ITurnoRepository turnoRepository;
 
 
@@ -42,23 +44,26 @@ public class RestControllerCliente {
     @GetMapping("/listar")
     public ResponseEntity<?> getClientes() {
 
-            List<Cliente> listadoClientes = clienteRepository.findAll();
+        // Llamamos al repositorio para obtener los usuarios con rol "CLIENTE"
+        List<Usuarios> clientes = usuariosRepository.findAllByRole("CLIENTE");
 
-        // Convertir a DTO
-        List<ClienteDto> clienteDTOs = listadoClientes.stream()
+
+        List<ClienteDto> clienteDTOs = clientes.stream()
                 .map(cliente -> new ClienteDto(
-                        cliente.getIdCliente(),
-                        cliente.getTelefono(),
-                        cliente.getDomicilio(),
-                        cliente.getUsuario().getUsername(),
-                        cliente.getUsuario().getNombre(),
-                        cliente.getUsuario().getApellido(),
-                        cliente.getUsuario().getDni(),
-                        cliente.getUsuario().getEmail()
+                        cliente.getCliente().getIdCliente(),
+                        cliente.getCliente().getTelefono(),
+                        cliente.getCliente().getDomicilio(),
+                        cliente.getUsername(),
+                        cliente.getNombre(),
+                        cliente.getApellido(),
+                        cliente.getDni(),
+                        cliente.getEmail()
                 ))
                 .collect(Collectors.toList());
 
-            return ResponseHandler.generateResponse("Listado clientes", HttpStatus.OK, clienteDTOs);
+        return ResponseHandler.generateResponse("Listado clientes", HttpStatus.OK, clienteDTOs);
+
+
 
     }
 
