@@ -1,6 +1,7 @@
 package com.adri.api_spa.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -28,13 +29,13 @@ public class Cliente {
     private String domicilio;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id" , referencedColumnName = "id_usuario")
     private Usuarios usuario;
 
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "cliente",fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Turno> turnos;
 
 

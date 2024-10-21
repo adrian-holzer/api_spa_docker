@@ -20,6 +20,7 @@ public interface IPagoRepository extends JpaRepository<Pago, Long> {
     @Query("SELECT p FROM Pago p JOIN p.turno t WHERE t.cliente.id = :clienteId ")
     List<Pago> findPagosByClienteId(@Param("clienteId") Long clienteId);
 
+
     @Query("SELECT p.metodoPago, SUM(p.monto) FROM Pago p WHERE DATE(p.fechaPago) BETWEEN :fechaInicio AND :fechaFin GROUP BY p.metodoPago")
     List<Object[]> findIngresosPorTipoDePagoEnRangoDeFechas(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 }

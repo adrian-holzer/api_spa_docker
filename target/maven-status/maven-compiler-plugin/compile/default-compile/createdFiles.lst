@@ -65,6 +65,7 @@ com\adri\api_spa\services\PagoService.class
 com\adri\api_spa\models\Comentario.class
 com\adri\api_spa\dtos\DtoPostulacion.class
 com\adri\api_spa\Config\Config.class
+com\adri\api_spa\dtos\ClienteDto.class
 com\adri\api_spa\models\Roles.class
 com\adri\api_spa\repositories\IClienteRepository.class
 com\adri\api_spa\repositories\ITurnoRepository.class

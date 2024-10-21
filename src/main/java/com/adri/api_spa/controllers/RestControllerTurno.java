@@ -186,7 +186,8 @@ public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha
 
 
 
-        List<Turno>turnosCliente = turnoRepository.findByCliente(c);
+       List<Turno>turnosCliente = turnoRepository.findByCliente(c);
+
 
         return ResponseHandler.generateResponse("Listados de todos los turnos turnos del cliente " + c.getUsuario().getUsername(), HttpStatus.OK,turnosCliente);
 
@@ -195,11 +196,12 @@ public ResponseEntity<?> obtenerHorariosDisponibles(@RequestParam(value = "fecha
 
 // solo profesional y admin
 
-    @GetMapping(value = "cliente/{idCliente}")
+    @GetMapping(value = "/cliente/{idCliente}")
     public ResponseEntity<?> obtenerTurnosPorCliente(@PathVariable Long idCliente) {
 
         Cliente c = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
 
 
 

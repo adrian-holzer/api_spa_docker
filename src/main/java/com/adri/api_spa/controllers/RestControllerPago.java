@@ -111,7 +111,7 @@ public class RestControllerPago {
     //// LISTADOS
    // Listado de pagos realizados por un cliente especifico (Secretaria: Acceso a los pagos que se realizan.)
 
-    // Ruta para recibir la factura y enviarla por email
+
     @GetMapping("/cliente/{idCliente}")
     public ResponseEntity<?> listadoPagosPorCliente(@PathVariable Long idCliente) {
 

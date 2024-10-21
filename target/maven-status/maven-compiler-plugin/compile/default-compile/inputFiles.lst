@@ -40,6 +40,7 @@ C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\s
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerComentario.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\models\Respuesta.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\Utils\ResponseHandler.java
+C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\dtos\ClienteDto.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\repositories\IProfesionalRepository.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\controllers\RestControllerRespuesta.java
 C:\Users\Usuario\Documents\tup\Metodologia\Metodologia\2024\tpi\deploy\api_spa\src\main\java\com\adri\api_spa\services\ProfesionalService.java
