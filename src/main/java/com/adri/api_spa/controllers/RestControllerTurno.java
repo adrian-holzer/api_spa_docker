@@ -11,6 +11,7 @@ import com.adri.api_spa.services.PagoService;
 import com.adri.api_spa.services.TurnoService;
 import com.adri.api_spa.services.UsuarioService;
 import com.mysql.cj.xdevapi.Client;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,12 @@ public class RestControllerTurno {
 
             }
             else if (estado.equalsIgnoreCase("finalizado")){
+
+
                 List<Turno> listadoTurnos =  turnoRepository.findByEstado(EstadoTurno.FINALIZADO);
+
+
+
                 return ResponseHandler.generateResponse("Listados de turnos finalizados  " , HttpStatus.OK,listadoTurnos);
 
 

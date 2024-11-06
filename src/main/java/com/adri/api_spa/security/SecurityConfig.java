@@ -147,6 +147,8 @@ public class SecurityConfig {
                 // CLIENTES
 
                 .requestMatchers(HttpMethod.GET,"/api/cliente/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+                .requestMatchers(HttpMethod.GET,"/api/cliente/clienteLogueado").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO","CLIENTE")
+                .requestMatchers(HttpMethod.PUT, "/api/cliente/modificar").hasAuthority("CLIENTE")
 
 
                 .anyRequest().authenticated()
@@ -160,7 +162,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173","https://frontspa.netlify.app/","https://spasentirsebien.netlify.app/","https://spa-proyect.vercel.app/")); // Origen permitido List.of("http://localhost:5173","https://frontspa.netlify.app/")
+        config.setAllowedOrigins(List.of("capacitor://localhost", "http://localhost", "https://localhost", "http://localhost:5173","https://frontspa.netlify.app/","https://spasentirsebien.netlify.app/","https://spa-proyect.vercel.app/")); // Origen permitido List.of("http://localhost:5173","https://frontspa.netlify.app/")
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

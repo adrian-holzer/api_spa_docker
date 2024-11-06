@@ -14,6 +14,8 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -67,6 +69,84 @@ public class RestControllerCliente {
 
     }
 
+
+// Obtener datos de cliente logueado
+
+
+    @GetMapping("/clienteLogueado")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+
+
+            Usuarios usuarioLogueado= usuariosRepository.findByUsername(authentication.getName()).get();
+
+
+            ClienteDto clienteDto = new ClienteDto(
+
+                    usuarioLogueado.getCliente().getIdCliente(),
+                    usuarioLogueado.getCliente().getTelefono(),
+                    usuarioLogueado.getCliente().getDomicilio(),
+                    usuarioLogueado.getUsername(),
+                    usuarioLogueado.getNombre(),
+                    usuarioLogueado.getApellido(),
+                    usuarioLogueado.getDni(),
+                    usuarioLogueado.getEmail()
+            );
+
+            return ResponseHandler.generateResponse("Cliente Logueado",HttpStatus.OK,clienteDto);
+        }
+        return ResponseHandler.generateResponse("No existe usuario logueado",HttpStatus.BAD_REQUEST,null);
+    }
+
+
+// Modificar datos de cliente
+
+
+    @PutMapping("/modificar")
+    public ResponseEntity<?> modificarCliente(@RequestBody ClienteDto clienteDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        System.out.println(clienteDto);
+        if (authentication != null && authentication.isAuthenticated()) {
+            Optional<Usuarios> usuarioAutenticadoOpt = usuariosRepository.findByUsername(authentication.getName());
+
+            if (usuarioAutenticadoOpt.isPresent()) {
+                Usuarios usuario = usuarioAutenticadoOpt.get();
+                Cliente cliente = usuario.getCliente();
+
+                // Actualizar datos del cliente
+                cliente.setTelefono(clienteDto.getTelefono());
+                cliente.setDomicilio(clienteDto.getDomicilio());
+
+                // Actualizar datos del usuario
+                usuario.setUsername(clienteDto.getNombreUsuario());
+                usuario.setNombre(clienteDto.getNombre());
+                usuario.setApellido(clienteDto.getApellido());
+                usuario.setDni(clienteDto.getDni());
+                usuario.setEmail(clienteDto.getEmail());
+
+                // Guardar cambios en el repositorio
+                usuariosRepository.save(usuario);
+
+                return ResponseHandler.generateResponse("Cliente actualizado con éxito", HttpStatus.OK, new ClienteDto(
+                        cliente.getIdCliente(),
+                        cliente.getTelefono(),
+                        cliente.getDomicilio(),
+                        usuario.getUsername(),
+                        usuario.getNombre(),
+                        usuario.getApellido(),
+                        usuario.getDni(),
+                        usuario.getEmail()
+                ));
+            } else {
+                return ResponseHandler.generateResponse("Usuario no encontrado", HttpStatus.NOT_FOUND, null);
+            }
+        }
+
+        return ResponseHandler.generateResponse("No existe usuario logueado", HttpStatus.UNAUTHORIZED, null);
+    }
 
 
 

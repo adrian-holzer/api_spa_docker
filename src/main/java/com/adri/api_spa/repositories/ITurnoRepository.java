@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ITurnoRepository extends JpaRepository<Turno, Long> {
@@ -62,4 +63,6 @@ public interface ITurnoRepository extends JpaRepository<Turno, Long> {
     List<Turno> findTurnosWhereClienteIsNotNullAndPagoIsNull();
 
     List<Turno> findByClienteIsNotNullAndPagoIsNull();
+
+
 }
