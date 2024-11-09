@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,6 @@ public class Usuarios {
     @Column(name = "id_usuario")
     private Long idUsuario;
     private String username;
-
 
     @JsonIgnore
     private String password;
@@ -59,7 +59,12 @@ public class Usuarios {
     @JsonBackReference
     private Profesional profesional;
 
+    // Campos adicionales para la recuperación de contraseña
+    @JsonIgnore
+    private String tokenRecuperacion;
 
+    @JsonIgnore
+    private LocalDateTime tokenExpiracion;
 
 
 

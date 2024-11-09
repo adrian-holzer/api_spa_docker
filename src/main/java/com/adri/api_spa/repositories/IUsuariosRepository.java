@@ -32,4 +32,7 @@ public interface IUsuariosRepository extends JpaRepository<Usuarios, Long> {
     @Query("SELECT u FROM Usuarios u INNER JOIN u.roles r WHERE r.name = :roleName")
     List<Usuarios> findAllByRole(@Param("roleName") String roleName);
 
+    Optional<Usuarios> findByEmail(String email);
+
+    Optional<Usuarios> findByTokenRecuperacion(String tokenRecuperacion);
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,7 +41,10 @@ public class UsuarioService {
         return this.usuariosRepository.findByUsername(username).get();
 
     }
-
+    public Usuarios findByEmail(String email) {
+        return usuariosRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario con email " + email + " no encontrado"));
+    }
 
 
 }

@@ -85,7 +85,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/registerAdmin").hasAuthority("ADMIN")
                 .requestMatchers("/api/auth/registerProf").hasAuthority("ADMIN")
                 .requestMatchers("/api/auth/registerSecretario").hasAuthority("ADMIN")
-
+                .requestMatchers(HttpMethod.POST, "/api/auth/solicitar").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/restablecer").permitAll()
 
 
                 // CONSULTAS
@@ -147,6 +148,7 @@ public class SecurityConfig {
                 // CLIENTES
 
                 .requestMatchers(HttpMethod.GET,"/api/cliente/listar").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO")
+
                 .requestMatchers(HttpMethod.GET,"/api/cliente/clienteLogueado").hasAnyAuthority("ADMIN" , "PROFESIONAL","SECRETARIO","CLIENTE")
                 .requestMatchers(HttpMethod.PUT, "/api/cliente/modificar").hasAuthority("CLIENTE")
 

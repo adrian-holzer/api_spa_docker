@@ -157,4 +157,45 @@ public class EmailService {
         transport.sendMessage(message, message.getAllRecipients());
         transport.close();
     }
+
+
+    public void enviarCorreoRecuperacion(String email, String token,String host, String port, String userName, String password) throws MessagingException {
+
+        System.out.println(password);
+
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Crear una nueva sesión sin autenticador
+        Session session = Session.getDefaultInstance(properties);
+
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(userName));
+
+        // Configurar destinatario
+        InternetAddress[] toAddresses = { new InternetAddress(email) };
+        msg.setRecipients(Message.RecipientType.TO, toAddresses);
+
+       // msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+        msg.setSubject("Recuperación de Contraseña");
+        msg.setText("Para restablecer tu contraseña, haz clic en el siguiente enlace: "
+                + "http://localhost:5173/restablecer-contrasena/" + token);
+
+
+        // Enviar el correo electrónico
+        Transport transport = session.getTransport("smtp");
+        transport.connect(userName, password);
+        transport.sendMessage(msg, msg.getAllRecipients());
+        transport.close();
+
+
+
+
+
+    }
+
     }

@@ -2,18 +2,16 @@ package com.adri.api_spa.controllers;
 
 import com.adri.api_spa.Utils.ApiError;
 import com.adri.api_spa.Utils.ResponseHandler;
-import com.adri.api_spa.dtos.DtoAuthRespuesta;
-import com.adri.api_spa.dtos.DtoLogin;
-import com.adri.api_spa.dtos.DtoRegistro;
-import com.adri.api_spa.models.Cliente;
-import com.adri.api_spa.models.Profesional;
-import com.adri.api_spa.models.Roles;
-import com.adri.api_spa.models.Usuarios;
+import com.adri.api_spa.dtos.*;
+import com.adri.api_spa.models.*;
 import com.adri.api_spa.repositories.IClienteRepository;
 import com.adri.api_spa.repositories.IRolesRepository;
 import com.adri.api_spa.repositories.IUsuariosRepository;
 import com.adri.api_spa.security.JwtGenerador;
+import com.adri.api_spa.services.EmailService;
 import com.adri.api_spa.services.ProfesionalService;
+import com.adri.api_spa.services.RecuperarContrasenaService;
+import com.adri.api_spa.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -41,6 +42,18 @@ public class RestControllerAuth {
 
     @Autowired
     ProfesionalService profesionalService;
+
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private RecuperarContrasenaService recuperarContrasenaService;
+
+    @Autowired
+    private EmailService emailService;
+
+
 
     @Autowired
     public RestControllerAuth(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, IRolesRepository rolesRepository, IUsuariosRepository usuariosRepository,
@@ -245,10 +258,18 @@ public class RestControllerAuth {
     }
 
 
+    @PostMapping("/solicitar")
+    public String solicitarRecuperacion(@RequestParam String email) {
+        System.out.println(email);
+        boolean enviado = recuperarContrasenaService.generarToken(email);
 
+        return enviado ? "Correo de recuperación enviado." : "Error al enviar correo de recuperación.";
+    }
 
-
-
-
+    @PostMapping("/restablecer")
+    public String restablecerContrasena(@RequestBody DtoRestablecerContrasena dtoRestablecerContrasena) {
+        boolean resultado = recuperarContrasenaService.restablecerContrasena(dtoRestablecerContrasena.getToken(), dtoRestablecerContrasena.getNuevaContrasena());
+        return resultado ? "Contraseña restablecida con éxito." : "Token inválido o expirado.";
+    }
 
 }

@@ -471,3 +471,49 @@ GET {{host}}/api/pago/ingresos?fechaInicio=2024-10-19&fechaFin=2024-10-25
 
 GET {{host}}/api/turno/profesional/servicios?idProfesional=1&fechaInicio=2024-10-20&fechaFin=2024-10-25
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+# TERCERA PARTE
+
+
+Obtener cliente logueado 
+
+GET - {{host}}/api/cliente/clienteLogueado    ----- PASAR EL TOKEN DEL CLIENTE LOGUEADO
+
+
+### MODIFICAR CLIENTE 
+
+PUT - {{host}}/api/cliente/modificar
+(NUEVOS DATOS A MODIFICAR DEL CLIENTE LOGUEADO)
+
+
+{
+"telefono": "1442232323",
+"domicilio": "Av nueva 456",
+"nombreUsuario": "user1_modificado",
+"nombre": "Juan",
+"apellido": "Perez",
+"dni": "30001031",
+"email": "nuevoemail@gmail.com"
+}
+
+
+
+### RECUPERACION DE CONTRASEÑA
+
+(LO PUEDE HACER CUALQUIERA )
+
+POST {{host}}/api/auth/solicitar?email=email_cliente@gmail.com  
+
+
+
+REESTABLECER (ESTO ES DESPUES DE Q TE LLEGA EL CORREO Y APRETAS EL LINK, TE MANDA A UN FORM NUEVO PARA 
+PONER LA NUEVA CONTRASEÑA LE DAS GUARDAR Y UTILIZA ESTA RUTA PARA PROCESAR ) --- ** VER COMO ESTÁ HECHO EL FRONT *** 
+
+EL LINK DE RECUPERACION Q SE MANDA AL CORREO ES UNA RUTA DEL FRONT + UN TOKEN DONDE ESTA EL FORMULARIO 
+
+LINK DEL FRONT http://localhost:5173/restablecer-contrasena/" + token
+
+
+POST {{host}}/api/auth/solicitar?email=email_cliente@gmail.com  
