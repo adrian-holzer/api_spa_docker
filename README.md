@@ -513,7 +513,13 @@ PONER LA NUEVA CONTRASEÑA LE DAS GUARDAR Y UTILIZA ESTA RUTA PARA PROCESAR ) --
 
 EL LINK DE RECUPERACION Q SE MANDA AL CORREO ES UNA RUTA DEL FRONT + UN TOKEN DONDE ESTA EL FORMULARIO 
 
-LINK DEL FRONT http://localhost:5173/restablecer-contrasena/" + token
+LINK DEL FRONT http://localhost:5173/restablecer-contrasena/" + token --- Hacer click y te lleva al form para
+crear una nueva contraseña .
 
+POST - http://localhost:8080/api/auth/restablecer
+{
+token: token,
+nuevaContrasena: nuevaContrasena
+}
 
-POST {{host}}/api/auth/solicitar?email=email_cliente@gmail.com  
+**** VER FRONT DE PRUEBA  ****
